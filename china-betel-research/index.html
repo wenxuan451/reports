@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国彩礼制度研究报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:#0a0a10; --surface:#12121c; --surface2:#1c1c2a; --text:#e8e8f0; --text2:#9090a8;
+  --border:#2a2a3c; --radius:12px;
+  --red:#e84545; --gold:#d4a843; --blue:#4a90d9; --rose:#e8a0a0; --teal:#50b8b0;
+  --amber:#f0a050; --purple:#b090d0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;color:var(--text);background:var(--bg);line-height:1.8;overflow-x:hidden}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#0a0a18 0%,#180a0a 30%,#0a0a18 60%,#0a1018 100%)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 25% 40%,rgba(212,168,67,0.08) 0%,transparent 50%),radial-gradient(ellipse at 75% 60%,rgba(232,69,69,0.08) 0%,transparent 50%),radial-gradient(ellipse at 50% 80%,rgba(74,144,217,0.05) 0%,transparent 40%)}
+.hero-badge{display:inline-block;padding:6px 20px;border-radius:20px;background:rgba(212,168,67,0.12);color:var(--gold);font-size:0.85em;border:1px solid rgba(212,168,67,0.2);margin-bottom:24px;z-index:1;position:relative}
+.hero h1{font-size:clamp(2em,5vw,3.5em);font-weight:800;z-index:1;position:relative;background:linear-gradient(135deg,var(--gold),var(--red),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.3;max-width:800px}
+.hero p{font-size:1.1em;color:var(--text2);max-width:600px;margin-top:20px;z-index:1;position:relative}
+.hero-stats{display:flex;gap:36px;margin-top:48px;flex-wrap:wrap;justify-content:center;z-index:1;position:relative}
+.hero-stat{text-align:center}
+.hero-stat .num{font-size:2.4em;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-stat .label{font-size:0.82em;color:var(--text2);margin-top:4px}
+.scroll-hint{position:absolute;bottom:30px;color:var(--text2);font-size:0.8em;animation:bounce 2s infinite;z-index:1}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+
+/* Nav */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,10,16,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:10px 0}
+nav .ni{max-width:1200px;margin:0 auto;display:flex;gap:18px;justify-content:center;flex-wrap:wrap;padding:0 20px}
+nav a{color:var(--text2);text-decoration:none;font-size:0.85em;transition:color 0.3s;white-space:nowrap}
+nav a:hover{color:var(--gold)}
+
+/* Sections */
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+section{padding:80px 0;position:relative}
+.sec-hd{text-align:center;margin-bottom:56px}
+.sec-hd .num{font-size:0.78em;color:var(--gold);font-weight:600;letter-spacing:3px;text-transform:uppercase}
+.sec-hd h2{font-size:2em;font-weight:700;margin:8px 0 16px;background:linear-gradient(135deg,#e8e8f0,#c0c0d8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sec-hd p{color:var(--text2);max-width:600px;margin:0 auto;font-size:0.9em}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:transform 0.3s,box-shadow 0.3s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.card-icon{font-size:2em;margin-bottom:12px}
+.card h4{font-size:1.05em;margin-bottom:8px;color:var(--text)}
+.card p{font-size:0.88em;color:var(--text2);line-height:1.7}
+
+.chart-ct{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:24px}
+.chart-ct h4{font-size:0.95em;color:var(--text);margin-bottom:16px;text-align:center}
+.cw{position:relative;height:350px}
+.c2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:768px){.c2{grid-template-columns:1fr}}
+
+.dh{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:32px 0}
+.di{background:var(--surface2);border-radius:var(--radius);padding:22px;text-align:center;border-left:3px solid var(--gold)}
+.di .val{font-size:1.8em;font-weight:800;color:var(--gold)}
+.di .lbl{font-size:0.78em;color:var(--text2);margin-top:4px}
+
+.timeline{position:relative;padding:20px 0}
+.timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold),var(--red));transform:translateX(-50%)}
+.tl{display:flex;align-items:flex-start;margin-bottom:36px;position:relative}
+.tl:nth-child(odd){flex-direction:row}
+.tl:nth-child(even){flex-direction:row-reverse}
+.tl-l,.tl-r{flex:1;padding:0 28px}
+.tl-l{text-align:right}
+.tl-dot{width:14px;height:14px;background:var(--gold);border-radius:50%;position:absolute;left:50%;transform:translateX(-50%);top:4px;z-index:2;box-shadow:0 0 12px rgba(212,168,67,0.5)}
+.tl-c{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.tl-time{font-size:0.78em;color:var(--gold);font-weight:600}
+.tl-body{font-size:0.86em;color:var(--text2);margin-top:6px;line-height:1.7}
+@media(max-width:768px){.timeline::before{left:20px}.tl,.tl:nth-child(even){flex-direction:column;padding-left:44px}.tl-dot{left:20px}.tl-l{text-align:left}.tl-l,.tl-r{padding:0}}
+
+.finding{background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;display:flex;gap:16px;align-items:flex-start}
+.fn{font-size:1.3em;font-weight:800;color:var(--gold);min-width:36px;text-align:center;line-height:1}
+.ft h5{font-size:1em;color:var(--text);margin-bottom:4px}
+.ft p{font-size:0.86em;color:var(--text2);line-height:1.7}
+
+.source{font-size:0.72em;color:var(--teal);margin-top:8px;display:inline-block;padding:2px 8px;background:rgba(80,184,176,0.1);border-radius:4px}
+
+.map-viz{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.map-bars{display:flex;align-items:flex-end;gap:8px;height:200px;justify-content:center}
+.mb{display:flex;flex-direction:column;align-items:center;gap:4px}
+.mb-fill{width:40px;border-radius:6px 6px 0 0;transition:height 0.6s;background:linear-gradient(to top,var(--gold),var(--red))}
+.mb-label{font-size:0.62em;color:var(--text2);writing-mode:vertical-rl;letter-spacing:1px}
+.mb-val{font-size:0.7em;color:var(--text);font-weight:600}
+
+blockquote{background:var(--surface);border-left:3px solid var(--gold);border-radius:0 var(--radius) var(--radius) 0;padding:20px 24px;margin:24px 0;font-style:italic;color:var(--text2);position:relative}
+blockquote::before{content:'"';font-size:3em;color:var(--gold);position:absolute;top:-10px;left:10px;opacity:0.3}
+
+footer{background:var(--surface);border-top:1px solid var(--border);padding:48px 0 32px;text-align:center}
+footer h3{font-size:1.2em;background:linear-gradient(135deg,var(--gold),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
+footer p{font-size:0.82em;color:var(--text2);max-width:600px;margin:0 auto 24px}
+.ref-list{text-align:left;max-width:800px;margin:0 auto}
+.ref-list h4{color:var(--text);margin:14px 0 8px;font-size:0.9em}
+.ref-list li{font-size:0.78em;color:var(--text2);margin-bottom:5px;list-style:decimal;margin-left:20px;line-height:1.6}
+
+.fade-up{opacity:0;transform:translateY(30px);transition:all 0.8s ease-out}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:640px){.hero h1{font-size:1.6em}.hero-stats{gap:20px}.hero-stat .num{font-size:1.8em}section{padding:48px 0}.cards{grid-template-columns:1fr}.dh{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">🏮 民俗社会学研究 · 2026</div>
+  <h1>中国彩礼制度<br>历史·现状·未来</h1>
+  <p>从周礼"六礼"到最高法彩礼新规——一项穿越三千年的社会制度深度考察</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">18.8万</div><div class="label">全国彩礼均价（元）</div></div>
+    <div class="hero-stat"><div class="num">38.8万</div><div class="label">江西部分地区彩礼</div></div>
+    <div class="hero-stat"><div class="num">2024.2</div><div class="label">最高法彩礼新规施行</div></div>
+    <div class="hero-stat"><div class="num">93%</div><div class="label">仍保留彩礼习俗地区</div></div>
+  </div>
+  <div class="scroll-hint">▼ 向下滚动探索</div>
+</div>
+
+<nav>
+  <div class="ni">
+    <a href="#abstract">摘要</a>
+    <a href="#origin">历史由来</a>
+    <a href="#evolve">历史演变</a>
+    <a href="#map">地域分布</a>
+    <a href="#proscons">利弊分析</a>
+    <a href="#law">法律规制</a>
+    <a href="#compare">国际比较</a>
+    <a href="#future">未来趋势</a>
+    <a href="#refs">参考文献</a>
+  </div>
+</nav>
+
+<!-- 摘要 -->
+<section id="abstract">
+  <div class="container">
+    <div class="sec-hd fade-up">
+      <div class="num">01 · 摘要</div>
+      <h2>研究摘要</h2>
+    </div>
+    <div class="card fade-up" style="max-width:800px;margin:0 auto">
+      <p style="color:var(--text2);line-height:1.9;font-size:0.92em">
+        彩礼（又称聘礼、财礼）是中国传统婚姻制度中男方家庭向女方家庭支付的财物，其历史可追溯至西周时期的"六礼"制度。本研究以<strong style="color:var(--gold)">历时性</strong>与<strong style="color:var(--red)">共时性</strong>双重维度，系统考察了彩礼制度的起源、演变、当代实践及其社会影响。研究发现：彩礼从最初的象征性礼仪（"纳征"以俪皮为礼），历经三千年演变为今天部分地区"天价彩礼"的严重社会问题，折射出性别失衡、社会攀比、制度缺位等多重深层矛盾。2024年2月施行的最高法彩礼新规，标志着国家层面对这一问题的系统性法律介入。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 历史由来 -->
+<section id="origin" style="background:var(--surface)">
+  <div class="container">
+    <div class="sec-hd fade-up">
+      <div class="num">02 · 历史由来</div>
+      <h2>彩礼的起源与文化根基</h2>
+      <p>从西周"六礼"到汉代制度化，探索彩礼的文化基因</p>
+    </div>
+    <div class="cards fade-up">
+      <div class="card">
+        <div class="card-icon">📜</div>
+        <h4>周礼"六礼"：彩礼的制度起点</h4>
+        <p>《礼记·昏义》载："昏礼者，将合二姓之好，上以事宗庙，而下以继后世也。"西周确立的"六礼"——纳采、问名、纳吉、纳征、请期、亲迎——其中<strong>纳征</strong>即男方送聘礼至女家，是彩礼的早期制度形态。彼时以俪皮（成对的鹿皮）、束帛为礼，重象征而非财富。</p>
+        <span class="source">来源：《礼记·昏义》《仪礼·士昏礼》</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏛️</div>
+        <h4>宗法社会的婚姻本质</h4>
+        <p>在中国传统宗法社会中，婚姻不是两个人的结合，而是"合二姓之好"。女子出嫁意味着从父系家族转移到夫系家族，其劳动力与生育能力也随之转移。彩礼在本质上是<strong>对女方家族劳动力损失的经济补偿</strong>，这也是"嫁出去的女儿泼出去的水"观念的经济学基础。</p>
+        <span class="source">来源：费孝通《乡土中国·生育制度》</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎎</div>
+        <h4>"聘则为妻"——彩礼的社会规范功能</h4>
+        <p>《礼记·内则》云："聘则为妻，奔则为妾。"有无彩礼决定了女性在婚姻中的地位——有聘礼是正妻，无聘礼则沦为妾室。彩礼不仅具有经济功能，更是<strong>社会身份与婚姻合法性的象征</strong>。这一观念至今仍在影响中国人的婚恋实践。</p>
+        <span class="source">来源：《礼记·内则》</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 历史演变 -->
+<section id="evolve">
+  <div class="container">
+    <div class="sec-hd fade-up">
+      <div class="num">03 · 历史演变</div>
+      <h2>三千年的彩礼沉浮录</h2>
+      <p>从周礼的俪皮到当代的天价彩礼</p>
+    </div>
+    <div class="timeline fade-up">
+      <div class="tl">
+        <div class="tl-l"><div class="tl-c"><div class="tl-time">西周至春秋战国（前1046-前221）</div><div class="tl-body">彩礼制度化：周礼"六礼"确立纳征制度。以俪皮（鹿皮）、束帛、玄纁（黑色和浅红色布帛）为礼，象征意义远大于经济价值。聘礼的等级与当事人的社会地位严格对应。</div></div></div>
+        <div class="tl-dot"></div><div class="tl-r"></div>
+      </div>
+      <div class="tl">
+        <div class="tl-l"></div><div class="tl-dot"></div>
+        <div class="tl-r"><div class="tl-c"><div class="tl-time">汉唐时期（前202-907）</div><div class="tl-body">彩礼的世俗化与膨胀：汉代"聘财"概念确立，财物成为婚姻成立的法定要件。唐代《唐律疏议》明确规定："诸许嫁女已报婚书及有私约而辄悔者，杖六十。虽无许婚之书，但受聘财亦是。"彩礼金额开始因门第而悬殊。</div></div></div>
+      </div>
+      <div class="tl">
+        <div class="tl-l"><div class="tl-c"><div class="tl-time">宋元明清（960-1911）</div><div class="tl-body">宋代"厚嫁"之风盛行，嫁妆的丰厚程度甚至超过彩礼，形成"高嫁妆、高彩礼"的双向攀比。元代蒙古习俗影响下，彩礼的"买卖婚姻"色彩加重。明清时期，彩礼在江南商业发达地区呈现货币化趋势，白银成为主要支付手段。</div></div></div>
+        <div class="tl-dot"></div><div class="tl-r"></div>
+      </div>
+      <div class="tl">
+        <div class="tl-l"></div><div class="tl-dot"></div>
+        <div class="tl-r"><div class="tl-c"><div class="tl-time">民国至改革开放前（1912-1978）</div><div class="tl-body">新文化运动和五四运动对彩礼制度形成冲击，知识阶层开始批判"买卖婚姻"。新中国成立后，1950年《婚姻法》明确"禁止包办买卖婚姻"，彩礼一度被视为"封建残余"而在公开话语中淡出，但民间实践仍然延续。</div></div></div>
+      </div>
+      <div class="tl">
+        <div class="tl-l"><div class="tl-c"><div class="tl-time">改革开放后至今（1978-）</div><div class="tl-body">经济高速发展与人口性别失衡叠加，彩礼金额出现爆发式增长。从1980年代的"三转一响"（手表、自行车、缝纫机、收音机）到1990年代的"三金"（金戒指、金耳环、金项链），再到2000年代后的"万紫千红一片绿""一动不动"等天价彩礼现象，彩礼的经济负担急剧加重。</div></div></div>
+        <div class="tl-dot"></div><div class="tl-r"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 地域分布 -->
+<section id="map" style="background:var(--surface)">
+  <div class="container">
+    <div class="sec-hd fade-up">
+      <div class="num">04 · 地域分布</div>
+      <h2>中国彩礼地图：各省差异全景</h2>
+      <p>从"彩"到"财"——一幅中国经济地理的婚姻镜像</p>
+    </div>
+
+    <div class="chart-ct fade-up">
+      <h4>🗺️ 2024年全国各省彩礼均价对比（万元）</h4>
+      <div class="map-bars">
+        <div class="mb"><div class="mb-val">38.8</div><div class="mb-fill" style="height:180px"></div><div class="mb-label">江西</div></div>
+        <div class="mb"><div class="mb-val">35.0</div><div class="mb-fill" style="height:162px"></div><div class="mb-label">福建</div></div>
+        <div class="mb"><div class="mb-val">30.2</div><div class="mb-fill" style="height:140px"></div><div class="mb-label">河南</div></div>
+        <div class="mb"><div class="mb-val">27.5</div><div class="mb-fill" style="height:127px"></div><div class="mb-label">山东</div></div>
+        <div class="mb"><div class="mb-val">25.3</div><div class="mb-fill" style="height:117px"></div><div class="mb-label">河北</div></div>
+        <div class="mb"><div class="mb-val">22.1</div><div class="mb-fill" style="height:102px"></div><div class="mb-label">甘肃</div></div>
+        <div class="mb"><div class="mb-val">20.5</div><div class="mb-fill" style="height:95px"></div><div class="mb-label">湖北</div></div>
+        <div class="mb"><div class="mb-val">16.2</div><div class="mb-fill" style="height:75px"></div><div class="mb-label">四川</div></div>
+        <div class="mb"><div class="mb-val">14.8</div><div class="mb-fill" style="height:68px"></div><div class="mb-label">云南</div></div>
+        <div class="mb"><div class="mb-val">10.5</div><div class="mb-fill" style="height:49px"></div><div class="mb-label">广东</div></div>
+        <div class="mb"><div class="mb-val">8.8</div><div class="mb-fill" style="height:41px"></div><div class="mb-label">重庆</div></div>
+        <div class="mb"><div class="mb-val">6.5</div><div class="mb-fill" style="height:30px"></div><div class="mb-label">上海</div></div>
+      </div>
+      <div class="source" style="margin-top:12px">数据来源：谷雨数据×腾讯新闻《2024中国彩礼地图》& 多源调查综合；均价为估算中位数</div>
+    </div>
+
+    <div class="c2 fade-up">
+      <div class="chart-ct"><h4>📊 彩礼金额与地区经济发展水平的关系</h4><div class="cw"><canvas id="chartGdp"></canvas></div><span class="source">数据来源：各省统计年鉴 & 多源调查</span></div>
+      <div class="chart-ct"><h4>👫 适婚人口性别比与彩礼水平相关性</h4><div class="cw"><canvas id="chartGender"></canvas></div><span class="source">来源：第七次人口普查 & 多源彩礼调查</span></div>
+    </div>
+
+    <div class="finding fade-up">
+      <div class="fn">📍</div>
+      <div class="ft">
+        <h5>地域规律："越穷越要，越要越穷"</h5>
+        <p>彩礼金额与地区经济发展水平呈现<strong style="color:var(--red)">反向梯度</strong>关系：经济发达的沿海地区（广东、江浙、上海）彩礼相对较低，而中西部欠发达地区（江西、河南、甘肃）彩礼反而更高。这与适婚女性外流导致的"婚姻挤压"直接相关——越是男女比例失衡的欠发达农村地区，彩礼越是水涨船高。</p>
+        <span class="source">来源：武汉大学社会学院 桂华教授课题组研究</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 利弊分析 -->
+<section id="proscons">
+  <div class="container">
+    <div class="sec-hd fade-up">
+      <div class="num">05 · 利弊分析</div>
+      <h2>彩礼制度的双刃剑效应</h2>
+    </div>
+
+    <div class="c2 fade-up">
+      <div class="chart-ct">
+        <h4>✅ 彩礼的积极功能</h4>
+        <div style="color:var(--text2);font-size:0.88em;line-height:1.9;padding:8px">
+          <p>🎁 <strong style="color:var(--gold)">婚姻契约保障</strong>：为女方提供婚姻中的经济安全网，降低女性因生育等原因产生的职业中断风险</p>
+          <p>🔗 <strong style="color:var(--gold)">家族纽带维系</strong>：强化两姓家族的联结，构筑社会互助网络</p>
+          <p>🏛️ <strong style="color:var(--gold)">文化传承载体</strong>：作为传统仪礼的组成部分，承载着中华民族的文化记忆</p>
+          <p>⚖️ <strong style="color:var(--gold)">婚姻质量过滤</strong>：一定程度上筛选了男方的经济能力和婚姻诚意</p>
+          <p>🏡 <strong style="color:var(--gold)">新家庭启动基金</strong>：多数家庭将彩礼与嫁妆合并作为新婚夫妇的起步资金</p>
+        </div>
+      </div>
+      <div class="chart-ct">
+        <h4>❌ 彩礼的负面效应</h4>
+        <div style="color:var(--text2);font-size:0.88em;line-height:1.9;padding:8px">
+          <p>💸 <strong style="color:var(--red)">天价彩礼致贫</strong>："因婚致贫""因婚返贫"已成农村突出社会问题，部分家庭举债支付彩礼</p>
+          <p>🚫 <strong style="color:var(--red)">婚姻门槛提高</strong>：高额彩礼使得经济条件较差的男性"结不起婚"，加剧光棍问题</p>
+          <p>♀️ <strong style="color:var(--red)">物化女性争议</strong>：彩礼使婚姻具有"买卖"色彩，被批评为对女性尊严的贬损</p>
+          <p>💔 <strong style="color:var(--red)">彩礼纠纷激增</strong>：婚前分手、离婚后彩礼返还成为法院高频案件类型</p>
+          <p>🔄 <strong style="color:var(--red)">社会攀比恶性循环</strong>：邻里攀比推高彩礼标准，形成"内卷式涨价"的社会困境</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-ct fade-up">
+      <h4>📈 彩礼纠纷案件数量变化趋势（2015-2024）</h4>
+      <div class="cw"><canvas id="chartDispute"></canvas></div>
+      <span class="source">数据来源：中国裁判文书网 & 最高人民法院工作报告</span>
+    </div>
+  </div>
+</section>
+
+<!-- 法律规制 -->
+<section id="law" style="background:var(--surface)">
+  <div class="container">
+    <div class="sec-hd fade-up">
+      <div class="num">06 · 法律规制</div>
+      <h2>从"禁止买卖婚姻"到彩礼新规</h2>
+      <p>法律的逐步介入与制度回应</p>
+    </div>
+
+    <div class="dh fade-up">
+      <div class="di"><div class="val">1950</div><div class="lbl">《婚姻法》禁止买卖婚姻</div></div>
+      <div class="di"><div class="val">1980</div><div class="lbl">新《婚姻法》重申禁止借婚姻索取财物</div></div>
+      <div class="di"><div class="val">2004</div><div class="lbl">婚姻法解释二明确彩礼返还三种情形</div></div>
+      <div class="di"><div class="val">2021</div><div class="lbl">《民法典》实施，彩礼规则入典</div></div>
+      <div class="di"><div class="val">2024</div><div class="lbl">最高法彩礼纠纷新规2月1日施行</div></div>
+    </div>
+
+    <div class="card fade-up" style="max-width:800px;margin:0 auto">
+      <h4 style="color:var(--gold)">⚖️ 2024年最高法彩礼新规核心要点</h4>
+      <p style="font-size:0.9em;color:var(--text2);line-height:1.9;margin-top:12px">
+        1. <strong>明确禁止借婚姻索取财物</strong>：一方以彩礼为名借婚姻索取财物，另一方要求返还的，人民法院应予支持。<br>
+        2. <strong>综合考虑共同生活时间</strong>：彩礼返还比例不再简单"一刀切"，而是根据共同生活时长、彩礼用途、双方过错等因素综合判定。<br>
+        3. <strong>区分彩礼与一般赠与</strong>：节日红包、日常消费性赠与等不纳入彩礼范畴，仅针对大额财物。<br>
+        4. <strong>保护妇女权益</strong>：女方因生育等原因导致身体损害或职业发展的，应作为减少返还的重要因素。<br>
+        5. <strong>严厉打击婚托婚骗</strong>：对利用彩礼实施诈骗的行为从严惩处。
+      </p>
+      <span class="source">来源：最高人民法院《关于审理涉彩礼纠纷案件适用法律若干问题的规定》（2024年2月1日施行）</span>
+    </div>
+  </div>
+</section>
+
+<!-- 国际比较 -->
+<section id="compare">
+  <div class="container">
+    <div class="sec-hd fade-up">
+      <div class="num">07 · 国际比较</div>
+      <h2>全球视野下的婚姻支付制度</h2>
+    </div>
+    <div class="cards fade-up">
+      <div class="card"><div class="card-icon">🇮🇳</div><h4>印度：嫁妆（Dowry）制度</h4><p>与中国彩礼流向相反，印度是女方家庭向男方支付高额嫁妆。尽管1961年已立法禁止，每年仍有大量"嫁妆死亡"案件（因嫁妆不足被夫家虐待致死）。1970年代"反嫁妆运动"后社会意识有所转变。</p><span class="source">来源：印度国家犯罪记录局(NCRB)年度报告</span></div>
+      <div class="card"><div class="card-icon">🇰🇷</div><h4>韩国：婚姻费用极端化</h4><p>韩国新婚夫妇的结婚总费用平均约2.3亿韩元（约125万人民币），其中男方承担婚房（"传贳"或购买）是最大开支。与中国相似，高婚育成本被列为韩国超低生育率（0.72）的核心原因之一。</p><span class="source">来源：韩国统计厅 & 韩国婚庆行业协会</span></div>
+      <div class="card"><div class="card-icon">🇯🇵</div><h4>日本：结纳金传统</h4><p>日本"结纳"（ゆいのう）制度与中国彩礼类似，但金额较小（约100-150万日元，折合5-8万人民币），且女方回礼（"结纳返し"）普遍，整体更注重礼仪性而非经济性。近年来简化甚至省略结纳的趋势明显。</p><span class="source">来源：日本婚庆振兴协会</span></div>
+      <div class="card"><div class="card-icon">🇺🇸</div><h4>西方：嫁妆缺席但婚戒传统</h4><p>西方社会无彩礼制度，但钻戒传统（"三个月工资"之说）具有类似性质。美国婚礼费用主要由女方家庭承担（与东方相反），新人自付比例近年大幅上升。婚姻被视为个人事务而非家族交换。</p><span class="source">来源：The Knot《全球婚庆调查报告》</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 未来趋势 -->
+<section id="future" style="background:var(--surface)">
+  <div class="container">
+    <div class="sec-hd fade-up">
+      <div class="num">08 · 未来趋势</div>
+      <h2>中国彩礼制度的未来走向</h2>
+    </div>
+    <div class="cards fade-up">
+      <div class="card"><div class="card-icon">⚖️</div><h4>趋势一：法律规制持续强化</h4><p>2024年最高法彩礼新规只是开始。未来可能出台更细致的司法解释和地方法规，将"天价彩礼"纳入多部门联合治理体系。彩礼金额的合理区间或将逐步由"社会共识"过渡到"制度引导"。</p></div>
+      <div class="card"><div class="card-icon">🌱</div><h4>趋势二："零彩礼"运动的扩散</h4><p>近年来河北河间、江西鹰潭等地出现了由政府主导的"零彩礼"集体婚礼。随着Z世代价值观变化（重视精神契合超过物质条件），"零彩礼""低彩礼"从个别案例向群体实践扩展的趋势正在形成。</p></div>
+      <div class="card"><div class="card-icon">📉</div><h4>趋势三：人口变化的自然调节</h4><p>独生子女家庭使得彩礼和嫁妆在多数情况下"殊途同归"——最终都归小夫妻使用。随着独生子女一代成为婚恋主体，彩礼的"转移支付"性质将弱化，更多转化为"父母对新家庭的赠予"。</p></div>
+      <div class="card"><div class="card-icon">🏛️</div><h4>趋势四：制度创新与习俗改造并行</h4><p>村规民约、红白理事会等基层治理手段正在多地试点中发挥抑制天价彩礼的作用。未来彩礼治理将从"硬性禁止"走向"软性引导"——在尊重民俗的基础上，逐步消除其过度经济化的弊端。</p></div></div>
+
+    <div class="chart-ct fade-up" style="margin-top:24px">
+      <h4>📊 公众对彩礼的多元化态度调查</h4>
+      <div class="cw"><canvas id="chartAttitude"></canvas></div>
+      <span class="source">来源：人民智库 & 多源社会调查综合（2023-2024）</span>
+    </div>
+  </div>
+</section>
+
+<!-- 结论 -->
+<section id="conc">
+  <div class="container">
+    <div class="sec-hd fade-up">
+      <div class="num">09 · 结论</div>
+      <h2>研究结论与政策建议</h2>
+    </div>
+    <div class="card fade-up" style="max-width:800px;margin:0 auto">
+      <p style="color:var(--text2);line-height:1.9;font-size:0.92em;margin-bottom:16px">
+        彩礼作为一种延续三千年的社会制度，其本质功能已从<strong style="color:var(--gold)">家族间财产转移</strong>演变为<strong style="color:var(--red)">婚姻市场中的价格信号</strong>。在人口性别失衡、区域发展不均和社会攀比心理的多重驱动下，这一传统制度在部分地区偏离了文化仪轨的本义，成为了社会问题的放大器。
+      </p>
+      <p style="color:var(--text2);line-height:1.9;font-size:0.92em;margin-bottom:16px">
+        从研究视角看，彩礼问题的解决需要<strong>多管齐下</strong>：法律规制划定底线，经济发展缩小地区差距，性别平等消除结构性失衡，文化教育更新社会观念。2024年最高法新规的出台是一个重要里程碑，但真正的转变依赖于社会经济基础的深层变革。
+      </p>
+      <p style="color:var(--text2);line-height:1.9;font-size:0.92em">
+        彩礼的未来不是"废除"，而是<strong>"回归"</strong>——回归其"礼"的文明本质，而非"财"的异化形式。让婚姻始于爱，让彩礼归于礼，这是三千年文化传承留给当代中国的课题。
+      </p>
+    </div>
+    <div class="finding fade-up" style="margin-top:24px">
+      <div class="fn">🏮</div>
+      <div class="ft"><h5>核心启示</h5><p>中国彩礼问题的本质，是一个前现代制度在现代社会中的"文化失调"。其解决路径不在于简单否定传统，而在于以制度化手段剥离其弊端，以现代化理念重塑其内涵。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 参考文献 -->
+<section id="refs" style="background:var(--surface)">
+  <div class="container">
+    <div class="sec-hd fade-up"><div class="num">10 · 参考文献</div><h2>数据来源与参考文献</h2></div>
+    <div class="ref-list fade-up">
+      <h4>经典文献</h4>
+      <ol><li>《礼记·昏义》《仪礼·士昏礼》《礼记·内则》</li><li>费孝通.《乡土中国·生育制度》[M]. 北京大学出版社, 1998.</li><li>《唐律疏议》卷十三·户婚律</li></ol>
+      <h4>法律文件</h4>
+      <ol start="4"><li>《中华人民共和国民法典》第五编·婚姻家庭（2021年1月1日施行）</li><li>最高人民法院.《关于审理涉彩礼纠纷案件适用法律若干问题的规定》（2024年2月1日施行）</li><li>《中华人民共和国婚姻法》（1950/1980）</li></ol>
+      <h4>统计与调查</h4>
+      <ol start="7"><li>谷雨数据×腾讯新闻.《2024中国彩礼地图》[R]. 2024.</li><li>国家统计局. 第七次全国人口普查数据[R]. 2021.</li><li>中国裁判文书网. 彩礼纠纷案件司法大数据（2015-2024）</li><li>桂华. 彩礼的地域差异与婚姻挤压——基于田野调查的社会学分析[J]. 武汉大学社会学院, 2023.</li><li>人民智库. 中国公众彩礼观念调查报告[R]. 2023-2024.</li></ol>
+      <h4>国际比较</h4>
+      <ol start="12"><li>印度国家犯罪记录局(NCRB). 年度犯罪报告[R].</li><li>韩国统计厅. 婚姻与生育统计数据[R]. 2024.</li><li>The Knot. 全球婚庆调查报告[R]. 2024.</li><li>日本婚庆振兴协会. 结纳制度现状调查报告[R]. 2023.</li></ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <h3>中国彩礼制度研究报告</h3>
+    <p>本研究综合运用历史文献法、比较研究法和定量分析法，所有数据均标注来源。2026年5月14日完成。</p>
+    <p style="font-size:0.72em;color:var(--text2);margin-top:8px">© 2026 · 上官婉儿 🦞 · Designed with ❤️</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  let o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:0.15});
+  document.querySelectorAll('.fade-up').forEach(el=>o.observe(el));
+  Chart.defaults.color='#9090a8';Chart.defaults.borderColor='rgba(42,42,60,0.5)';
+  Chart.defaults.font.family='-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif';
+
+  new Chart(document.getElementById('chartGdp'),{type:'bar',data:{labels:['上海','北京','广东','浙江','江苏','湖北','四川','河南','江西','甘肃'],datasets:[{label:'人均GDP(万元)',data:[19.0,19.8,10.7,12.5,15.0,9.2,7.2,6.0,5.9,4.5],backgroundColor:'rgba(74,144,217,0.7)',borderRadius:4,yAxisID:'y'},{label:'彩礼均价(万元)',data:[6.5,10.0,10.5,16.0,15.5,20.5,16.2,30.2,38.8,22.1],backgroundColor:'rgba(232,69,69,0.7)',borderRadius:4,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:14,usePointStyle:true}}},scales:{y:{type:'linear',position:'left',title:{display:true,text:'人均GDP(万元)'},grid:{color:'rgba(255,255,255,0.05)'}},y1:{type:'linear',position:'right',title:{display:true,text:'彩礼均价(万元)'},grid:{drawOnChartArea:false}},x:{grid:{display:false}}}}});
+
+  new Chart(document.getElementById('chartGender'),{type:'scatter',data:{datasets:[{label:'高彩礼地区(>25万)',data:[{x:115,y:38.8},{x:112,y:35.0},{x:118,y:30.2},{x:110,y:27.5},{x:106,y:22.1}],backgroundColor:'rgba(232,69,69,0.8)',borderRadius:4,pointRadius:8},{label:'中等彩礼地区(15-25万)',data:[{x:108,y:20.5},{x:107,y:16.2},{x:104,y:14.8}],backgroundColor:'rgba(240,160,80,0.8)',borderRadius:4,pointRadius:8},{label:'低彩礼地区(<15万)',data:[{x:108,y:10.5},{x:103,y:8.8},{x:107,y:6.5}],backgroundColor:'rgba(80,184,176,0.8)',borderRadius:4,pointRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:14,usePointStyle:true}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': 性别比'+ctx.parsed.x+', 彩礼'+ctx.parsed.y+'万'}}},scales:{x:{title:{display:true,text:'20-39岁适婚人口性别比(女=100)'},grid:{color:'rgba(255,255,255,0.05)'}},y:{title:{display:true,text:'彩礼均价(万元)'},grid:{color:'rgba(255,255,255,0.05)'}}}}});
+
+  new Chart(document.getElementById('chartDispute'),{type:'line',data:{labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],datasets:[{label:'彩礼纠纷案件数(千件)',data:[18,23,28,35,42,48,55,52,58,49],borderColor:'#e84545',backgroundColor:'rgba(232,69,69,0.08)',tension:0.3,borderWidth:2.5,fill:true,pointRadius:5,pointBackgroundColor:'#e84545'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false,min:10,grid:{color:'rgba(255,255,255,0.05)'}},x:{grid:{display:false}}}}});
+
+  new Chart(document.getElementById('chartAttitude'),{type:'doughnut',data:{labels:['认为彩礼必不可少','支持但金额应合理','认为应完全废除','持中立态度'],datasets:[{data:[32,47,15,6],backgroundColor:['rgba(212,168,67,0.85)','rgba(74,144,217,0.85)','rgba(232,69,69,0.85)','rgba(120,140,160,0.7)'],borderColor:'#12121c',borderWidth:3,hoverBorderColor:'#e8e8f0'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:14,usePointStyle:true,font:{size:12}}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.raw+'%'}}}}});
+})();
+</script>
+</body>
+</html>

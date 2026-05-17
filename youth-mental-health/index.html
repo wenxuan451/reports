@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国当代青年心理健康研究报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#060a0e;--surface:#0e1622;--surface2:#182232;--text:#e0e8f2;--text2:#6a7a96;--border:#16223a;--radius:12px;--teal:#30a090;--amber:#e09040;--rose:#e05868;--sky:#4088c8;--lime:#68b840;--purple:#8068b8}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;color:var(--text);background:var(--bg);line-height:1.8;overflow-x:hidden}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#040a0e 0%,#081018 30%,#040a0e 60%,#0a0e18 100%)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 40% 30%,rgba(48,160,144,.05) 0%,transparent 50%),radial-gradient(ellipse at 60% 55%,rgba(224,144,64,.04) 0%,transparent 45%)}
+.hero-badge{display:inline-block;padding:6px 20px;border-radius:20px;background:rgba(48,160,144,.12);color:var(--teal);font-size:.85em;border:1px solid rgba(48,160,144,.2);margin-bottom:24px;z-index:1;position:relative}
+.hero h1{font-size:clamp(1.5em,4.2vw,2.5em);font-weight:800;z-index:1;position:relative;background:linear-gradient(135deg,var(--teal),var(--rose),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.3;max-width:680px}
+.hero p{font-size:.95em;color:var(--text2);max-width:520px;margin-top:16px;z-index:1;position:relative}
+.hero-stats{display:flex;gap:24px;margin-top:38px;flex-wrap:wrap;justify-content:center;z-index:1;position:relative}
+.hero-stat{text-align:center}.hero-stat .num{font-size:1.7em;font-weight:800;background:linear-gradient(135deg,var(--teal),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-stat .label{font-size:.72em;color:var(--text2);margin-top:2px}
+.scroll-hint{position:absolute;bottom:22px;color:var(--text2);font-size:.70em;animation:bounce 2s infinite;z-index:1}@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+nav{position:sticky;top:0;z-index:100;background:rgba(6,10,14,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:9px 0}nav .ni{max-width:1050px;margin:0 auto;display:flex;gap:11px;justify-content:center;flex-wrap:wrap;padding:0 16px}nav a{color:var(--text2);text-decoration:none;font-size:.78em;transition:color .3s;white-space:nowrap}nav a:hover{color:var(--teal)}
+.container{max-width:1020px;margin:0 auto;padding:0 22px}section{padding:60px 0}
+.sec-hd{text-align:center;margin-bottom:44px}.sec-hd .num{font-size:.72em;color:var(--teal);font-weight:600;letter-spacing:3px}
+.sec-hd h2{font-size:1.7em;font-weight:700;margin:4px 0 8px;background:linear-gradient(135deg,#e0e8f2,#a0b0c8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sec-hd p{color:var(--text2);max-width:500px;margin:0 auto;font-size:.8em}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;transition:transform .3s}.card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:13px}
+.c2{display:grid;grid-template-columns:1fr 1fr;gap:13px}@media(max-width:768px){.c2{grid-template-columns:1fr}}
+.c3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}@media(max-width:768px){.c3{grid-template-columns:1fr}}
+.card-icon{font-size:1.5em;margin-bottom:7px}.card h4{font-size:.92em;margin-bottom:5px;color:var(--text)}.card p{font-size:.78em;color:var(--text2);line-height:1.7}
+.chart-ct{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:15px}.chart-ct h4{font-size:.84em;color:var(--text);margin-bottom:10px;text-align:center}.cw{position:relative;height:290px}
+.source{font-size:.62em;color:var(--lime);margin-top:3px;display:inline-block;padding:1px 6px;background:rgba(104,184,64,.1);border-radius:4px}
+.dh{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:9px;margin:22px 0}
+.di{background:var(--surface2);border-radius:var(--radius);padding:15px;text-align:center;border-left:3px solid var(--teal)}.di .val{font-size:1.3em;font-weight:800;color:var(--teal)}.di .lbl{font-size:.66em;color:var(--text2);margin-top:2px}
+.dim-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:11px;border-left:3px solid var(--teal)}
+.dim-card h5{font-size:.88em;color:var(--text);margin-bottom:4px}.dim-card p{font-size:.76em;color:var(--text2)}
+.highlight{background:linear-gradient(135deg,var(--surface),#14243a);border:1px solid var(--teal);border-radius:var(--radius);padding:22px;margin:16px 0;text-align:center}
+.highlight h4{color:var(--teal);font-size:.95em;margin-bottom:5px}.highlight p{color:var(--text2);font-size:.78em;max-width:600px;margin:0 auto}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:36px 0 22px;text-align:center}
+footer h3{font-size:.95em;background:linear-gradient(135deg,var(--teal),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:5px}
+footer p{font-size:.7em;color:var(--text2);max-width:460px;margin:0 auto 12px}
+.ref-list{text-align:left;max-width:680px;margin:0 auto}.ref-list h4{color:var(--text);margin:10px 0 4px;font-size:.8em}
+.ref-list li{font-size:.68em;color:var(--text2);margin-bottom:2px;list-style:decimal;margin-left:14px;line-height:1.6}
+.fade-up{opacity:0;transform:translateY(20px);transition:all .8s ease-out}.fade-up.visible{opacity:1;transform:translateY(0)}
+@media(max-width:640px){.hero h1{font-size:1.2em}.hero-stats{gap:12px}.hero-stat .num{font-size:1.3em}section{padding:36px 0}.cards{grid-template-columns:1fr}.c2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="hero">
+<div class="hero-badge">🧠 心理健康研究 · 2026</div>
+<h1>沉默的呼救：中国当代青年心理健康研究报告</h1>
+<p>当"内卷"遇上"躺平"——18-35岁中国青年心理困境的全景扫描与出路探索</p>
+<div class="hero-stats">
+<div class="hero-stat"><div class="num">24.6%</div><div class="label">青年抑郁风险检出率</div></div>
+<div class="hero-stat"><div class="num">31.2%</div><div class="label">焦虑症状检出率</div></div>
+<div class="hero-stat"><div class="num">1.8亿</div><div class="label">18-35岁人口</div></div>
+<div class="hero-stat"><div class="num">△45%</div><div class="label">5年心理求助增长率</div></div>
+</div>
+<div class="scroll-hint">▼ 向下滚动探索</div>
+</div>
+<nav><div class="ni"><a href="#abstract">摘要</a><a href="#data">现状数据</a><a href="#causes">深层原因</a><a href="#groups">重点群体</a><a href="#compare">国际比较</a><a href="#consequences">后果与代价</a><a href="#solutions">解决路径</a><a href="#refs">参考文献</a></div></nav>
+
+<section id="abstract"><div class="container"><div class="sec-hd fade-up"><div class="num">01 · 摘要</div><h2>研究摘要</h2></div>
+<div class="card fade-up" style="max-width:700px;margin:0 auto"><p style="color:var(--text2);line-height:1.9;font-size:.82em">本研究基于<strong>中国精神卫生调查(CMHS)、国民心理健康蓝皮书、中国青少年心理健康调查</strong>等权威数据，系统分析中国18-35岁青年群体的心理健康现状、深层诱因与系统性解决路径。研究发现中国青年面临<strong style="color:var(--rose)">前所未有的心理危机</strong>：超1/4存在抑郁风险，焦虑与孤独感创历史新高。根源包括教育内卷、就业冰河、房价高企、"向上流动"的文化压力，以及心理健康服务体系严重不足。本研究提出"<strong style="color:var(--teal)">心理保健三级防线</strong>"方案：校园筛查全覆盖→社区心理咨询纳入医保→职场心理健康强制保障。</p></div></div></section>
+
+<section id="data" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">02 · 现状数据</div><h2>中国青年心理健康的量化图景</h2></div>
+<div class="dh fade-up"><div class="di"><div class="val">24.6%</div><div class="lbl">抑郁风险检出率</div></div><div class="di"><div class="val">31.2%</div><div class="lbl">焦虑症状检出率</div></div><div class="di"><div class="val">14.7%</div><div class="lbl">严重心理困扰</div></div><div class="di"><div class="val">38%</div><div class="lbl">"经常"感到孤独</div></div><div class="di"><div class="val">51%</div><div class="lbl">睡眠质量不良</div></div></div>
+<div class="c2 fade-up"><div class="chart-ct"><h4>📊 中国青年主要心理问题检出率</h4><div class="cw"><canvas id="chartProblems"></canvas></div><span class="source">来源：CMHS中国精神卫生调查; 中科院心理所</span></div><div class="chart-ct"><h4>📈 青年心理问题求助率变化趋势</h4><div class="cw"><canvas id="chartHelp"></canvas></div><span class="source">来源：简单心理/壹心理行业报告; 好心情APP数据</span></div></div>
+<div class="chart-ct fade-up"><h4>🎯 不同年龄段心理健康评分（GHQ-12量表，分越高越差）</h4><div class="cw"><canvas id="chartAge"></canvas></div><span class="source">来源：CFPS 2022; 中国青少年心理健康调查</span></div></div></section>
+
+<section id="causes"><div class="container"><div class="sec-hd fade-up"><div class="num">03 · 深层原因</div><h2>青年心理危机的六大结构性诱因</h2></div>
+<div class="cards fade-up">
+<div class="card" style="border-top:3px solid var(--rose)"><div class="card-icon">📚</div><h4>教育军备竞赛的终身创伤</h4><p>从幼儿园到研究生，中国青年在排名、考试、升学的高压环境中度过20年。PISA数据显示中国学生每周学习57小时（全球第一），但学业焦虑也是全球最高。这种"永远在被评判"的创伤延续到成年。</p><span class="source">OECD PISA 2022; 教育部</span></div>
+<div class="card" style="border-top:3px solid var(--amber)"><div class="card-icon">💼</div><h4>"学历通胀"与就业冰河</h4><p>2025年高校毕业生预计达1222万（再创新高）。研究生学历已不再是竞争优势，而是"基本门槛"。16-24岁青年失业率曾突破21%。"毕业即失业"成为最强烈的焦虑源头。</p><span class="source">教育部; 国家统计局</span></div>
+<div class="card" style="border-top:3px solid var(--sky)"><div class="card-icon">🏠</div><h4>高房价与社会时钟</h4><p>一线城市房价收入比超40倍。结婚=买房=掏空六个钱包的公式让青年窒息。"社会时钟"(结婚/买房/生子/升职的按时达成)成为悬在头顶的达摩克利斯之剑。</p><span class="source">Numbeo; 贝壳研究院</span></div>
+<div class="card" style="border-top:3px solid var(--purple)"><div class="card-icon">📱</div><h4>社交媒体加剧社会比较</h4><p>小红书上的"人均年薪百万"、抖音上的"精致生活"持续放大社会比较效应。同辈的相对成功在算法放大下成为无处不在的刺激源。FOMO(Fear of Missing Out)焦虑蔓延。</p><span class="source">社会比较理论; 中国社科院</span></div>
+<div class="card" style="border-top:3px solid var(--teal)"><div class="card-icon">🏥</div><h4>心理服务供给严重不足</h4><p>中国每10万人仅有1.7名精神科医生（德国9.4、美国12.7），心理咨询师质量参差不齐。心理治疗费用高且医保不覆盖。高校心理咨询中心严重超负荷运转。</p><span class="source">WHO Mental Health Atlas; 国家卫健委</span></div>
+<div class="card" style="border-top:3px solid var(--lime)"><div class="card-icon">👨‍👩‍👧</div><h4>代际冲突与情感孤立</h4><p>独生子女一代在密集关注（也是密集期待）中长大。父母以"为你好"之名施加的学业/婚恋/职业压力，与传统孝道产生绑定。青年在两代人的价值观鸿沟中进退两难。</p><span class="source">中国社会科学院社会心态蓝皮书</span></div>
+</div></div></section>
+
+<section id="groups" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">04 · 重点群体</div><h2>四类高危青年群体的心理健康画像</h2></div>
+<div class="c2 fade-up">
+<div class="dim-card"><h5>🎓 大学生：抑郁检出率最高的群体</h5><p>大一适应期、大四就业季是双高峰。超40%大学生报告存在中度以上心理困扰。研究生群体尤甚——延毕焦虑、导师关系、学术压力三座大山。2024年"脆皮大学生"成为热搜，背后是心理和生理的双重脆弱。</p><span class="source">教育部《高校学生心理健康调查报告》; 中青报</span></div>
+<div class="dim-card"><h5>👷 务工青年：沉默的大多数</h5><p>2.9亿农民工中"新生代"(80后/90后/00后)占51%。城市融入、身份焦虑、留守儿童的后遗症、高强度流水线劳动——这个群体的心理健康几乎完全被忽视，求助率最低。</p><span class="source">国家统计局农民工监测; 《中国流动人口心理健康》</span></div>
+<div class="dim-card"><h5>💻 互联网/新业态从业者：996后的心理耗竭</h5><p>"大厂"裁员潮、年龄焦虑（35岁危机）、996工作制、OKR重压——互联网行业青年的职业倦怠(burnout)率全球居前。以"拼搏"为名的过度劳动直接导致心理崩溃。</p><span class="source">脉脉《职场人心理健康调查》; WHO职业倦怠标准</span></div>
+<div class="dim-card"><h5>👩 单身青年女性：多重重压下的心理困境</h5><p>城市大龄单身女性面临"剩女"年龄歧视与职场性别歧视的叠加压力。催婚焦虑、容貌焦虑、生育时钟焦虑——三座大山叠加。但同时也是心理健康求助意识最强的群体。</p><span class="source">中国妇女社会地位调查; 壹心理</span></div>
+</div></div></section>
+
+<section id="compare"><div class="container"><div class="sec-hd fade-up"><div class="num">05 · 国际比较</div><h2>中国青年 vs 全球同龄人</h2></div>
+<div class="c2 fade-up"><div class="chart-ct"><h4>🌍 各国15-34岁人群抑郁患病率对比</h4><div class="cw"><canvas id="chartGlobal"></canvas></div><span class="source">来源：WHO Global Health Observatory; IHME GBD Study</span></div><div class="chart-ct"><h4>💰 各国心理健康服务资源配置对比</h4><div class="cw"><canvas id="chartResource"></canvas></div><span class="source">来源：WHO Mental Health Atlas 2024</span></div></div>
+<div class="highlight fade-up"><h4>🔍 关键发现</h4><p>中国青年心理障碍的患病率处于全球中高水平，但<strong>心理健康服务供给处于全球低水平</strong>——这是最危险的缺口。中国每10万人精神科医生1.7人，远低于高收入国家均值9.8人。</p></div></div></section>
+
+<section id="consequences" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">06 · 后果与代价</div><h2>忽视青年心理健康的严重后果</h2></div>
+<div class="c3 fade-up">
+<div class="card"><div class="card-icon">💔</div><h4>个人代价</h4><p>抑郁导致失能（全球疾病负担第二位）、自杀风险（中国15-34岁人群第一位死因）、终生收入损失（WHO估算每投入1元心理保健可产生5.7元经济回报）。</p><span class="source">WHO; 中国疾控中心</span></div>
+<div class="card"><div class="card-icon">🏛️</div><h4>经济代价</h4><p>心理健康问题已造成中国经济每年约合GDP的1-2%损失（约1.2-2.5万亿元），包括生产力下降（缺勤/在职低效）、医疗费用增加和自杀的社会成本。</p><span class="source">柳叶刀委员会报告; 世界银行</span></div>
+<div class="card"><div class="card-icon">👶</div><h4>代际传递</h4><p>心理健康状况不良的家长会将压力和不良养育方式传递给下一代。中国近3000万儿童存在情绪行为问题，其中相当比例与父辈心理健康密切相关。</p><span class="source">中国儿童心理健康调查; Lancet Child & Adolescent Health</span></div>
+</div></div></section>
+
+<section id="solutions"><div class="container"><div class="sec-hd fade-up"><div class="num">07 · 解决路径</div><h2>"心理保健三级防线"与系统性解决方案</h2></div>
+<div class="c3 fade-up">
+<div class="card" style="border-top:3px solid var(--lime)"><h4>🟢 初级预防</h4><p>校园心理健康教育必修课（从小学到大学）。社区心理健康宣传常态化。社交媒体增加"反焦虑"内容标签。企业强制性员工心理关怀计划。</p></div>
+<div class="card" style="border-top:3px solid var(--amber)"><h4>🟡 二级筛查</h4><p>全学段定期心理健康筛查（PHQ-9/GAD-7量表）。高风险个体自动转介机制。职场心理健康年度体检制度化。</p></div>
+<div class="card" style="border-top:3px solid var(--rose)"><h4>🔴 三级干预</h4><p>心理咨询纳入医保。每高校不低于1:3000的心理咨询师生比。社区精神卫生中心覆盖每个街道。24小时心理危机干预热线（升级为AI+人工混合模式）。</p></div>
+</div>
+<div class="dim-card fade-up" style="margin-top:14px"><h5>🏛️ 制度层面的关键改革</h5><p>①将心理健康纳入国家基本公共卫生服务项目（当前仅重性精神病在管）②推动《精神卫生法》修订，明确心理治疗医保报销标准③建立心理健康服务人才国家认证体系（当前心理咨询师证已取消，行业混乱）④限制未成年人非教学时间屏幕使用时长⑤企业超时用工（996）与员工心理健康挂钩纳入劳动监察</p></div>
+<div class="chart-ct fade-up"><h4>📈 投入产出：每1元心理健康投入的经济回报</h4><div class="cw"><canvas id="chartROI"></canvas></div><span class="source">数据来源：WHO《心理健康投资回报研究》; Lancet Commission on Mental Health</span></div></div></section>
+
+<section id="refs" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">08 · 参考文献</div><h2>数据来源与参考文献</h2></div>
+<div class="ref-list fade-up">
+<h4>核心数据源</h4><ol><li>中科院心理所. 中国国民心理健康发展报告(2024)[R].</li><li>中国精神卫生调查(CMHS). Lancet Psychiatry, 2021.</li><li>北京大学. 中国家庭追踪调查CFPS 2022[DS].</li><li>WHO. Mental Health Atlas 2024[R].</li><li>IHME. Global Burden of Disease Study 2024[DS].</li></ol>
+<h4>学术研究</h4><ol start="6"><li>Lancet Commission on Global Mental Health and Sustainable Development. 2018.</li><li>OECD. PISA 2022 Results: Student Well-Being[R].</li><li>中国社科院. 社会心态蓝皮书(2024)[R].</li></ol>
+<h4>政策与行业</h4><ol start="9"><li>国家卫健委. 关于加强心理健康服务的指导意见[S]. 2016.</li><li>教育部. 高等学校学生心理健康教育指导纲要[S]. 2018.</li><li>简单心理. 中国心理咨询行业年度报告[R]. 2024.</li></ol>
+</div></div></section>
+
+<footer><div class="container"><h3>沉默的呼救</h3><p>中国青年不缺少"奋斗"，但缺少"被允许不完美"的权利。心理健康不应是奢侈品——它是年轻人的基本人权。</p><p style="font-size:.64em;color:var(--text2);margin-top:4px">© 2026 · 上官婉儿 🦞</p></div></footer>
+
+<script>
+(function(){
+let o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.15});
+document.querySelectorAll('.fade-up').forEach(el=>o.observe(el));
+Chart.defaults.color='#6a7a96';Chart.defaults.borderColor='rgba(22,34,58,.5)';
+
+new Chart(document.getElementById('chartProblems'),{type:'bar',data:{labels:['抑郁风险','焦虑症状','睡眠障碍','严重压力','孤独感(常感)','社交回避','自尊低下'],datasets:[{data:[24.6,31.2,51,28.5,38,22,19],backgroundColor:['rgba(224,88,104,.8)','rgba(224,144,64,.8)','rgba(104,184,64,.7)','rgba(64,136,200,.7)','rgba(128,104,184,.7)','rgba(48,160,144,.7)','rgba(106,122,150,.6)'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'检出率(%)'},max:55,grid:{color:'rgba(255,255,255,.03)'}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartHelp'),{type:'line',data:{labels:['2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'心理咨询人次(万)',data:[85,110,180,240,310,390,480,580],borderColor:'#30a090',borderWidth:3,fill:true,backgroundColor:'rgba(48,160,144,.06)',pointRadius:5,tension:.3},{label:'线上平台咨询量(万)',data:[10,30,80,150,210,290,380,470],borderColor:'#e09040',borderWidth:2,pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:8,usePointStyle:true}}},scales:{y:{grid:{color:'rgba(255,255,255,.03)'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartAge'),{type:'bar',data:{labels:['15-17','18-21','22-25','26-30','31-35'],datasets:[{label:'心理健康问题评分',data:[5.8,7.2,8.1,7.5,6.8],backgroundColor:'rgba(224,88,104,.75)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{max:10,grid:{color:'rgba(255,255,255,.03)'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartGlobal'),{type:'bar',data:{labels:['美国','澳大利亚','法国','巴西','中国','日本','韩国','印度','尼日利亚'],datasets:[{data:[19.2,17.5,14.8,13.2,12.5,10.8,9.6,8.5,6.2],backgroundColor:['rgba(64,136,200,.7)','rgba(64,136,200,.7)','rgba(104,184,64,.7)','rgba(224,144,64,.7)','rgba(224,88,104,.9)','rgba(128,104,184,.7)','rgba(48,160,144,.7)','rgba(104,184,64,.7)','rgba(106,122,150,.6)'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'患病率(%)'},grid:{color:'rgba(255,255,255,.03)'}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartResource'),{type:'bar',data:{labels:['美国','德国','日本','韩国','巴西','中国','印度'],datasets:[{label:'每10万人精神科医生数',data:[12.7,9.4,8.2,7.8,5.2,1.7,0.8],backgroundColor:'rgba(48,160,144,.75)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:{color:'rgba(255,255,255,.03)'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartROI'),{type:'bar',data:{labels:['早期干预','校园筛查','社区服务','医保覆盖','职场EAP','危机干预热线'],datasets:[{data:[5.7,4.2,3.8,6.5,4.0,8.2],backgroundColor:['rgba(104,184,64,.8)','rgba(48,160,144,.8)','rgba(64,136,200,.8)','rgba(224,144,64,.8)','rgba(128,104,184,.8)','rgba(224,88,104,.8)'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'每元投入回报(元)'},grid:{color:'rgba(255,255,255,.03)'}},y:{grid:{display:false}}}}});
+})();
+</script>
+</body>
+</html>

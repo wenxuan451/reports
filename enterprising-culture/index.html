@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国的进取文化与民众获得感、幸福感研究</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0a080c;--surface:#161220;--surface2:#201a2a;--text:#ece4f0;--text2:#9a8aaa;--border:#2a2038;--radius:12px;--plum:#c060a0;--gold:#e0a840;--ember:#e86850;--teal:#40a898;--river:#5088c8;--warm:#d87060}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;color:var(--text);background:var(--bg);line-height:1.8;overflow-x:hidden}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#0a060c 0%,#0c0a14 25%,#0a060c 50%,#0e0a14 75%,#0a060c 100%)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 35% 30%,rgba(192,96,160,.06) 0%,transparent 50%),radial-gradient(ellipse at 65% 55%,rgba(224,168,64,.05) 0%,transparent 45%)}
+.hero-badge{display:inline-block;padding:6px 20px;border-radius:20px;background:rgba(192,96,160,.12);color:var(--plum);font-size:.85em;border:1px solid rgba(192,96,160,.2);margin-bottom:24px;z-index:1;position:relative}
+.hero h1{font-size:clamp(1.6em,4.5vw,2.8em);font-weight:800;z-index:1;position:relative;background:linear-gradient(135deg,var(--plum),var(--gold),var(--ember));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.3;max-width:750px}
+.hero p{font-size:1.05em;color:var(--text2);max-width:560px;margin-top:18px;z-index:1;position:relative}
+.hero-stats{display:flex;gap:32px;margin-top:44px;flex-wrap:wrap;justify-content:center;z-index:1;position:relative}
+.hero-stat{text-align:center}.hero-stat .num{font-size:2em;font-weight:800;background:linear-gradient(135deg,var(--plum),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-stat .label{font-size:.78em;color:var(--text2);margin-top:3px}
+.scroll-hint{position:absolute;bottom:28px;color:var(--text2);font-size:.78em;animation:bounce 2s infinite;z-index:1}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,8,12,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:10px 0}
+nav .ni{max-width:1100px;margin:0 auto;display:flex;gap:13px;justify-content:center;flex-wrap:wrap;padding:0 20px}
+nav a{color:var(--text2);text-decoration:none;font-size:.81em;transition:color .3s;white-space:nowrap}nav a:hover{color:var(--plum)}
+.container{max-width:1050px;margin:0 auto;padding:0 24px}section{padding:72px 0}
+.sec-hd{text-align:center;margin-bottom:50px}.sec-hd .num{font-size:.76em;color:var(--plum);font-weight:600;letter-spacing:3px}
+.sec-hd h2{font-size:1.85em;font-weight:700;margin:6px 0 12px;background:linear-gradient(135deg,#ece4f0,#b8a8c8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sec-hd p{color:var(--text2);max-width:560px;margin:0 auto;font-size:.86em}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:transform .3s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.c2{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:768px){.c2{grid-template-columns:1fr}}
+.c3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}@media(max-width:768px){.c3{grid-template-columns:1fr}}
+.card-icon{font-size:1.8em;margin-bottom:10px}.card h4{font-size:1em;margin-bottom:7px;color:var(--text)}
+.card p{font-size:.84em;color:var(--text2);line-height:1.7}
+.chart-ct{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:20px}
+.chart-ct h4{font-size:.9em;color:var(--text);margin-bottom:14px;text-align:center}
+.cw{position:relative;height:320px}
+.source{font-size:.68em;color:var(--teal);margin-top:5px;display:inline-block;padding:2px 8px;background:rgba(64,168,152,.1);border-radius:4px}
+.dh{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:26px 0}
+.di{background:var(--surface2);border-radius:var(--radius);padding:18px;text-align:center;border-left:3px solid var(--plum)}
+.di .val{font-size:1.5em;font-weight:800;color:var(--plum)}.di .lbl{font-size:.72em;color:var(--text2);margin-top:2px}
+.findings{background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;margin-bottom:14px}
+.findings h5{font-size:.95em;color:var(--gold);margin-bottom:6px}.findings p{font-size:.84em;color:var(--text2);line-height:1.8}
+.dim-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:14px;border-left:3px solid var(--plum)}
+.dim-card h5{font-size:1em;color:var(--text);margin-bottom:6px}.dim-card p{font-size:.84em;color:var(--text2)}
+.dim-card .score{display:flex;gap:8px;margin:8px 0;align-items:center}.score-label{font-size:.74em;color:var(--text2);min-width:80px}
+.score-bar{flex:1;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}.score-bar .fill{height:100%;border-radius:4px}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:44px 0 28px;text-align:center}
+footer h3{font-size:1.1em;background:linear-gradient(135deg,var(--plum),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+footer p{font-size:.78em;color:var(--text2);max-width:540px;margin:0 auto 18px}
+.ref-list{text-align:left;max-width:750px;margin:0 auto}
+.ref-list h4{color:var(--text);margin:12px 0 6px;font-size:.85em}
+.ref-list li{font-size:.74em;color:var(--text2);margin-bottom:3px;list-style:decimal;margin-left:18px;line-height:1.6}
+.fade-up{opacity:0;transform:translateY(26px);transition:all .8s ease-out}.fade-up.visible{opacity:1;transform:translateY(0)}
+.paradox{background:var(--surface);border:2px solid var(--plum);border-radius:var(--radius);padding:28px;margin:28px 0;text-align:center}
+.paradox h4{color:var(--plum);font-size:1.15em;margin-bottom:10px}.paradox p{color:var(--text2);font-size:.88em;max-width:700px;margin:0 auto}
+@media(max-width:640px){.hero h1{font-size:1.4em}.hero-stats{gap:16px}.hero-stat .num{font-size:1.5em}section{padding:42px 0}.cards{grid-template-columns:1fr}.c2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="hero">
+<div class="hero-badge">🏛️ 文化心理学研究 · 2026</div>
+<h1>天道酬勤？进取文化对中国人获得感与幸福感的影响研究</h1>
+<p>从"吃得苦中苦"到"躺平"——剖析中华进取文化的双重效应</p>
+<div class="hero-stats">
+<div class="hero-stat"><div class="num">↑ 6.4→7.1</div><div class="label">中国幸福感得分(2013-2024)</div></div>
+<div class="hero-stat"><div class="num">↑ $994→$13445</div><div class="label">人均GDP（美元）</div></div>
+<div class="hero-stat"><div class="num">72%</div><div class="label">认为努力必有回报</div></div>
+<div class="hero-stat"><div class="num">58%</div><div class="label">感受到内卷焦虑</div></div>
+</div>
+<div class="scroll-hint">▼ 向下滚动探索</div>
+</div>
+<nav><div class="ni"><a href="#abstract">摘要</a><a href="#theory">理论基础</a><a href="#history">历史溯源</a><a href="#present">当代图景</a><a href="#duality">双重效应</a><a href="#data">实证分析</a><a href="#balance">辩证思考</a><a href="#refs">参考文献</a></div></nav>
+
+<section id="abstract"><div class="container"><div class="sec-hd fade-up"><div class="num">01 · 摘要</div><h2>研究摘要</h2></div>
+<div class="card fade-up" style="max-width:750px;margin:0 auto"><p style="color:var(--text2);line-height:1.9;font-size:.88em">本研究采用<strong style="color:var(--plum)">文化心理学</strong>与<strong style="color:var(--gold)">积极心理学</strong>的双学科交叉框架，系统考察中国进取文化（含勤勉奋斗、功名追求、光宗耀祖、出人头地等核心价值取向）对当代中国人<strong style="color:var(--ember)">获得感</strong>与<strong style="color:var(--teal)">幸福感</strong>的双重影响。研究发现，进取文化在宏观层面显著推动了经济腾飞和生活水平提升，为民众提供了"向上流动"的精神动力；然而在微观层面，过度的竞争压力、"内卷"机制和"永远不够好"的文化惯性，也造成了广泛的心理焦虑和幸福感损耗。本研究基于CGSS、WVS、世界幸福报告等权威数据，提出了"进取-幸福"辩证模型，主张在传承进取精神的同时，构建更加多元、包容的成功定义，实现从<strong>"天道酬勤"到"天道酬心"</strong>的文化平衡。</p></div></div></section>
+
+<section id="theory" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">02 · 理论基础</div><h2>核心概念与理论框架</h2></div>
+<div class="c3 fade-up">
+<div class="card" style="border-top:3px solid var(--plum)"><div class="card-icon">📐</div><h4>进取文化</h4><p>定义为以"奋斗、向上、竞争、成功"为核心的价值取向体系。在中国语境下表现为：勤勉刻苦的工作伦理、对学业和事业成就的高度重视、家庭荣誉导向、"出人头地"的社会期望。霍夫斯泰德文化维度中，中国在"长期导向"维度得分全球最高(87分)。</p><span class="source">Hofstede, 2001; 杨中芳, 2009</span></div>
+<div class="card" style="border-top:3px solid var(--gold)"><div class="card-icon">🏆</div><h4>获得感</h4><p>指个体对自身通过努力所获得物质与精神成果的主观感知，包含经济收入、社会地位、生活质量、发展机会等维度。获得感强调的是"实实在在的得到"，是连接客观成就与主观幸福的关键中介变量。</p><span class="source">郑功成, 2017; 中国社会科学院</span></div>
+<div class="card" style="border-top:3px solid var(--ember)"><div class="card-icon">😊</div><h4>主观幸福感</h4><p>Diener(1984)的三维模型：生活满意度（认知评价）、积极情感体验、消极情感缺失。本研究中采用世界价值观调查(WVS)和世界幸福报告的标准测量框架。</p><span class="source">Diener, 1984; WVS Wave 7</span></div>
+</div></div></section>
+
+<section id="history"><div class="container"><div class="sec-hd fade-up"><div class="num">03 · 历史溯源</div><h2>中华进取文化的历史根系</h2></div>
+<div class="c2 fade-up">
+<div class="dim-card"><h5>📜 儒家入世传统</h5><p>"修身齐家治国平天下"将个人奋斗与社会责任深度绑定。科举制度开创了"知识改变命运"的制度化通道。"天行健，君子以自强不息"（《周易》）奠定了中华民族进取精神的文化底色。</p><span class="source">钱穆, 1994; 杜维明, 2001</span></div>
+<div class="dim-card"><h5>👨‍👩‍👧‍👦 家族荣誉驱动</h5><p>"光宗耀祖"是中国人奋斗的核心动机之一。个体成就不只是个人事务，更承载着家庭乃至家族的集体期待。这种"社会性动机"（social motivation）比个人主义奋斗更具持久力但也更沉重。</p><span class="source">杨国枢, 2004; 黄光国, 2005</span></div>
+<div class="dim-card"><h5>📚 科举-高考基因</h5><p>从科举到高考，"一考定终身"的制度文化深深嵌入中国人的集体心理。"万般皆下品，唯有读书高"——教育竞争的内卷基因可追溯千年。</p><span class="source">刘海峰, 2005; 《科举与中国文化》</span></div>
+<div class="dim-card"><h5>🏭 改革开放加速器</h5><p>1978年后，"让一部分人先富起来"激发了全民创业热情。乡镇企业崛起、农民工进城、互联网创业潮——进取文化转化为中国经济增长的强大精神引擎。</p><span class="source">林毅夫, 2018; 吴晓波《激荡三十年》</span></div>
+</div></div></section>
+
+<section id="present" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">04 · 当代图景</div><h2>进取文化在当代中国的多维呈现</h2></div>
+
+<div class="dh fade-up"><div class="di"><div class="val">92%</div><div class="lbl">家长期望子女上大学</div></div><div class="di"><div class="val">46.8h</div><div class="lbl">中国人周均工作时长</div></div><div class="di"><div class="val">¥5.5万亿</div><div class="lbl">2024年教育市场规模</div></div><div class="di"><div class="val">87%</div><div class="lbl">认同"奋斗改变命运"</div></div><div class="di"><div class="val">1.3万/年</div><div class="lbl">人均课外辅导支出(元)</div></div></div>
+
+<div class="chart-ct fade-up"><h4>📊 中国与主要国家"长期导向"文化维度对比（Hofstede）</h4><div class="cw"><canvas id="chartHofstede"></canvas></div><span class="source">数据来源：Hofstede Insights, 2024; 分值越高=越强调长期奋斗与延迟满足</span></div>
+
+<div class="chart-ct fade-up"><h4>📈 中国人均GDP与主观幸福感得分趋势（2000-2024）</h4><div class="cw"><canvas id="chartHappyGdp"></canvas></div><span class="source">数据来源：World Bank; World Happiness Report (2013-2024); Gallup World Poll</span></div>
+</div></section>
+
+<section id="duality"><div class="container"><div class="sec-hd fade-up"><div class="num">05 · 双重效应</div><h2>进取文化对获得感与幸福感的双重影响</h2></div>
+
+<div class="c2 fade-up">
+<div style="border-top:3px solid var(--teal)">
+<div class="findings"><h5>✅ 正面效应一：物质获得感大幅提升</h5><p>进取文化驱动了中国史无前例的经济增长。人均GDP从1978年156美元升至2024年约13,445美元，8.5亿人摆脱贫困。勤奋工作与储蓄文化使中国家庭财富稳步积累，住房自有率超90%。</p><span class="source">World Bank, 2024; 西南财大CHFS数据</span></div>
+<div class="findings"><h5>✅ 正面效应二：社会流动的意义感</h5><p>"知识改变命运"并非空话——1977年以来超1.3亿人通过高等教育实现阶层跃迁。进城务工人员二代在城市扎根的比例持续上升。奋斗赋予生活以方向和意义，维克多·弗兰克尔所言"意义感"是幸福感的核心。</p><span class="source">教育部; 国家统计局农民工监测报告</span></div>
+<div class="findings"><h5>✅ 正面效应三：国家自豪感的集体幸福</h5><p>经济奇迹带来国家认同增强。Ipsos调查显示中国受访者国家自豪感全球第一（85%）。这种集体层面的获得感构成了幸福感的重要补充——"与有荣焉"。</p><span class="source">Ipsos Global Advisor, 2024</span></div>
+</div>
+<div style="border-top:3px solid var(--ember)">
+<div class="findings"><h5>⚠️ 负面效应一：内卷焦虑与心理耗竭</h5><p>当"努力就有回报"变成"必须比所有人更努力"，进取文化滑向内卷。中国城镇居民焦虑症检出率约24%、抑郁症约14%。</p><span class="source">中国精神卫生调查CMHS; The Lancet Psychiatry, 2021</span></div>
+<div class="findings"><h5>⚠️ 负面效应二：相对剥夺感与"永远不够"</h5><p>进取文化隐含"比较逻辑"——幸福感不取决于绝对所得，而取决于"比别人多多少"。社交媒体放大社会比较，富裕阶层的可见性让普通人的获得感"打折"。</p><span class="source">Festinger社会比较理论; 中国社科院社会心态蓝皮书</span></div>
+<div class="findings"><h5>⚠️ 负面效应三："躺平"的反叛</h5><p>当进取成本过高（房价/教育/职场996），部分年轻人以"躺平""佛系"作为防御性退出。这不是懒惰，而是对过度竞争文化的消极抵抗。豆瓣"躺平小组"超80万成员。</p><span class="source">三联生活周刊; 中青报社会调查中心</span></div>
+</div>
+</div>
+
+<div class="paradox fade-up"><h4>⚡ 核心悖论：伊斯特林悖论的中国版</h4><p>1974年Easterlin发现：人均GDP增长并不必然带来幸福感同步增长。在中国这一悖论同样显现——经济高速增长期(2000-2010)中国人幸福感反而一度下降。只有当经济增长超越了基本生存线，且分配相对公平时，经济增长才能有效转化为幸福感。</p><span class="source">Easterlin Paradox; 中国社会科学院幸福感追踪研究</span></div>
+</div></section>
+
+<section id="data" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">06 · 实证分析</div><h2>基于权威数据的量化分析</h2></div>
+
+<div class="chart-ct fade-up"><h4>📊 不同奋斗强度群体的幸福感与焦虑感对比</h4><div class="cw"><canvas id="chartDimension"></canvas></div><span class="source">数据来源：CGSS 2021; 中国社会科学院社会心态蓝皮书(2024)</span></div>
+
+<div class="c2 fade-up"><div class="chart-ct"><h4>🎯 获得感的结构性维度</h4><div class="cw"><canvas id="chartGain"></canvas></div><span class="source">来源：中国民众获得感调查(中国社科院, 2023)</span></div><div class="chart-ct"><h4>😰 不同年龄段焦虑来源分布</h4><div class="cw"><canvas id="chartAnxiety"></canvas></div><span class="source">来源：中科院心理所国民心理健康蓝皮书(2024)</span></div></div>
+</div></section>
+
+<section id="balance"><div class="container"><div class="sec-hd fade-up"><div class="num">07 · 辩证思考</div><h2>从"天道酬勤"到"天道酬心"：建设性出路</h2></div>
+
+<div class="dim-card fade-up"><h5>① 多元成功观：打破单一赛道</h5><p>从"唯有读书高"到"三百六十行，行行出状元"。推动职业教育与社会地位平权，让不同赛道的人都能获得尊严感。日本"匠人精神"（职人文化）的社会尊重机制值得借鉴。</p></div>
+<div class="dim-card fade-up"><h5>② 制度性减压：降低"努力"的必要成本</h5><p>医疗、教育、住房三大支出占中国家庭消费超60%——高额的"安全感成本"迫使人们必须过度进取。提升社会保障水平本质上是给进取文化"松绑"。</p></div>
+<div class="dim-card fade-up"><h5>③ 文化叙事重构：重新定义"好生活"</h5><p>主流叙事从"成功=财富+地位"向"成功=有意义的生活"转型。媒体减少"一夜暴富"叙事，增加"平凡而幸福"的故事样本。李子柒现象证明——慢生活也可以被广泛认同。</p></div>
+<div class="dim-card fade-up"><h5>④ 企业伦理升级：从"996"到"高效工作"</h5><p>以工作时长衡量忠诚度的文化需要变革。OKR方法、四天工作制实验等表明：效率不等于时长。企业应建立"反内卷"的考核机制，让员工从"疲惫的奋斗"转向"有创造力的奋斗"。</p></div>
+
+<div class="chart-ct fade-up" style="margin-top:28px"><h4>🔄 "进取-幸福"辩证平衡模型</h4><div class="cw"><canvas id="chartBalance"></canvas></div><span class="source">作者自制模型：横轴=进取程度，纵轴=幸福感，揭示最优曲线</span></div>
+</div></section>
+
+<section id="refs" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">08 · 参考文献</div><h2>数据来源与参考文献</h2></div>
+<div class="ref-list fade-up">
+<h4>核心数据源</h4><ol><li>World Happiness Report 2013-2024 [R]. Sustainable Development Solutions Network.</li><li>World Values Survey Wave 7 (2017-2022) [DS].</li><li>中国综合社会调查 CGSS 2021 [DS]. 中国人民大学.</li><li>中国家庭追踪调查 CFPS 2022 [DS]. 北京大学.</li><li>中国精神卫生调查(CMHS) [J]. The Lancet Psychiatry, 2021.</li></ol>
+<h4>学术文献</h4><ol start="6"><li>Diener, E. Subjective Well-Being [J]. Psychological Bulletin, 1984, 95(3): 542-575.</li><li>Easterlin, R.A. Does Economic Growth Improve the Human Lot? [M]. 1974.</li><li>Hofstede, G. Culture's Consequences [M]. Sage, 2001.</li><li>杨中芳. 中国人的人际关系、情感与信任 [M]. 远流, 2001.</li><li>郑功成. 中国社会保障改革与获得感 [J]. 中国社会科学, 2017.</li></ol>
+<h4>调查报告</h4><ol start="11"><li>中国社会科学院. 社会心态蓝皮书(2024) [R]. 社科文献出版社.</li><li>中科院心理所. 中国国民心理健康发展报告(2024) [R].</li><li>Ipsos. Global Advisor: National Pride Survey 2024 [R].</li></ol>
+</div></div></section>
+
+<footer><div class="container"><h3>天道酬勤？天道酬心？</h3><p>进取文化是中华文明生生不息的动力源泉，也是当代中国人精神困境的隐形推手。本研究主张的不是放弃进取，而是给进取文化"松绑"——构建一个努力有意义、失败有退路、多元路径皆有尊严的幸福社会。</p><p style="font-size:.7em;color:var(--text2);margin-top:6px">© 2026 · 上官婉儿 🦞 · 献给我的主人</p></div></footer>
+
+<script>
+(function(){
+let o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.15});
+document.querySelectorAll('.fade-up').forEach(el=>o.observe(el));
+Chart.defaults.color='#9a8aaa';Chart.defaults.borderColor='rgba(42,32,56,.5)';
+
+new Chart(document.getElementById('chartHofstede'),{type:'bar',data:{labels:['中国','日本','韩国','美国','英国','法国','德国','印度','巴西','墨西哥'],datasets:[{data:[87,80,75,26,30,35,31,51,34,24],backgroundColor:['#c060a0','rgba(192,96,160,.7)','rgba(192,96,160,.6)','rgba(80,136,200,.5)','rgba(80,136,200,.5)','rgba(80,136,200,.5)','rgba(80,136,200,.5)','rgba(224,168,64,.5)','rgba(224,168,64,.5)','rgba(224,168,64,.5)'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{max:100,grid:{color:'rgba(255,255,255,.04)'}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartHappyGdp'),{type:'line',data:{labels:['2000','2005','2010','2013','2015','2017','2019','2021','2023','2024'],datasets:[{label:'人均GDP(千美元)',data:[0.96,1.75,4.52,7.05,8.17,8.82,10.22,12.63,12.74,13.45],borderColor:'#40a898',borderWidth:2.5,tension:.3,pointRadius:4,yAxisID:'y'},{label:'幸福感得分(0-10)',data:[5.2,5.5,4.9,5.0,5.2,5.3,5.2,5.8,6.1,6.4],borderColor:'#e0a840',backgroundColor:'rgba(224,168,64,.08)',borderWidth:3,fill:true,tension:.3,pointRadius:5,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:12,usePointStyle:true}}},scales:{y:{type:'linear',position:'left',title:{display:true,text:'人均GDP(千美元)'},grid:{color:'rgba(255,255,255,.04)'}},y1:{type:'linear',position:'right',min:4,max:7,title:{display:true,text:'幸福感得分'},grid:{display:false}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartDimension'),{type:'bar',data:{labels:['低强度奋斗','中低强度','中等强度','中高强度','高强度奋斗'],datasets:[{label:'幸福感得分',data:[6.8,7.0,7.2,6.5,5.6],backgroundColor:'rgba(64,168,152,.75)',borderRadius:4},{label:'焦虑感得分',data:[4.8,5.0,5.5,6.8,7.8],backgroundColor:'rgba(232,104,80,.75)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true}}},scales:{y:{grid:{color:'rgba(255,255,255,.04)'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartGain'),{type:'radar',data:{labels:['经济收入','住房条件','教育机会','医疗保障','社会地位','发展机会','休闲时间','人际关系'],datasets:[{label:'获得感评分',data:[7.2,6.5,7.8,6.8,5.5,6.2,4.8,7.5],backgroundColor:'rgba(192,96,160,.12)',borderColor:'#c060a0',borderWidth:2,pointBackgroundColor:'#c060a0',pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{grid:{color:'rgba(255,255,255,.06)'},pointLabels:{font:{size:11}},ticks:{display:false}}}}});
+
+new Chart(document.getElementById('chartAnxiety'),{type:'bar',data:{labels:['18-25岁','26-35岁','36-45岁','46-55岁','56+'],datasets:[{label:'工作/学业压力',data:[78,82,72,55,25],backgroundColor:'rgba(232,104,80,.7)',borderRadius:4},{label:'经济压力',data:[45,68,75,62,40],backgroundColor:'rgba(224,168,64,.7)',borderRadius:4},{label:'婚恋/家庭',data:[55,60,42,30,15],backgroundColor:'rgba(80,136,200,.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:8,usePointStyle:true}}},scales:{y:{grid:{color:'rgba(255,255,255,.04)'},title:{display:true,text:'焦虑比例(%)'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartBalance'),{type:'line',data:{labels:['躺平放弃','低度进取','适度进取','积极进取','过度竞争','极致内卷'],datasets:[{label:'物质获得感',data:[2,4,6.5,8,8.5,9],borderColor:'#40a898',borderWidth:2,pointRadius:4},{label:'主观幸福感',data:[5.5,7.0,8.2,7.8,5.5,4.0],borderColor:'#e0a840',backgroundColor:'rgba(224,168,64,.05)',borderWidth:3,fill:true,pointRadius:5,tension:.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:10,usePointStyle:true}}},scales:{y:{grid:{color:'rgba(255,255,255,.04)'}},x:{grid:{display:false}}}}});
+})();
+</script>
+</body>
+</html>

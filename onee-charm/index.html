@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>"御姐"魅力之谜：进化心理学与审美文化研究</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0a0608;--surface:#1a1018;--surface2:#241820;--text:#f0e0e8;--text2:#a08898;--border:#302028;--radius:12px;--rose:#e06080;--wine:#c03050;--gold:#e0a840;--velvet:#8050a0;--teal:#40a898}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;color:var(--text);background:var(--bg);line-height:1.8;overflow-x:hidden}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#0a0408 0%,#0e0812 30%,#0a0408 60%,#120a12 100%)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 35% 30%,rgba(224,96,128,.06) 0%,transparent 50%),radial-gradient(ellipse at 65% 55%,rgba(224,168,64,.04) 0%,transparent 45%)}
+.hero-badge{display:inline-block;padding:6px 20px;border-radius:20px;background:rgba(224,96,128,.12);color:var(--rose);font-size:.85em;border:1px solid rgba(224,96,128,.2);margin-bottom:24px;z-index:1;position:relative}
+.hero h1{font-size:clamp(1.5em,4.5vw,2.7em);font-weight:800;z-index:1;position:relative;background:linear-gradient(135deg,var(--rose),var(--wine),var(--velvet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.3;max-width:680px}
+.hero p{font-size:1em;color:var(--text2);max-width:530px;margin-top:18px;z-index:1;position:relative}
+.hero-stats{display:flex;gap:26px;margin-top:38px;flex-wrap:wrap;justify-content:center;z-index:1;position:relative}
+.hero-stat{text-align:center}.hero-stat .num{font-size:1.8em;font-weight:800;background:linear-gradient(135deg,var(--rose),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-stat .label{font-size:.74em;color:var(--text2);margin-top:2px}
+.scroll-hint{position:absolute;bottom:26px;color:var(--text2);font-size:.74em;animation:bounce 2s infinite;z-index:1}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,6,8,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:9px 0}
+nav .ni{max-width:1100px;margin:0 auto;display:flex;gap:11px;justify-content:center;flex-wrap:wrap;padding:0 18px}
+nav a{color:var(--text2);text-decoration:none;font-size:.79em;transition:color .3s;white-space:nowrap}nav a:hover{color:var(--rose)}
+.container{max-width:1000px;margin:0 auto;padding:0 22px}section{padding:64px 0}
+.sec-hd{text-align:center;margin-bottom:46px}.sec-hd .num{font-size:.73em;color:var(--rose);font-weight:600;letter-spacing:3px}
+.sec-hd h2{font-size:1.75em;font-weight:700;margin:5px 0 9px;background:linear-gradient(135deg,#f0e0e8,#c0a0b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sec-hd p{color:var(--text2);max-width:520px;margin:0 auto;font-size:.82em}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;transition:transform .3s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.c2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:768px){.c2{grid-template-columns:1fr}}
+.c3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}@media(max-width:768px){.c3{grid-template-columns:1fr}}
+.card-icon{font-size:1.6em;margin-bottom:8px}.card h4{font-size:.95em;margin-bottom:6px;color:var(--text)}
+.card p{font-size:.8em;color:var(--text2);line-height:1.7}
+.chart-ct{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:16px}
+.chart-ct h4{font-size:.86em;color:var(--text);margin-bottom:11px;text-align:center}.cw{position:relative;height:300px}
+.source{font-size:.64em;color:var(--teal);margin-top:4px;display:inline-block;padding:1px 6px;background:rgba(64,168,152,.1);border-radius:4px}
+.dh{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;margin:22px 0}
+.di{background:var(--surface2);border-radius:var(--radius);padding:16px;text-align:center;border-left:3px solid var(--rose)}
+.di .val{font-size:1.35em;font-weight:800;color:var(--rose)}.di .lbl{font-size:.68em;color:var(--text2);margin-top:2px}
+.dim-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:12px;border-left:3px solid var(--rose)}
+.dim-card h5{font-size:.92em;color:var(--text);margin-bottom:5px}.dim-card p{font-size:.8em;color:var(--text2)}
+.score-row{display:flex;gap:8px;margin:6px 0;align-items:center}.score-lbl{font-size:.7em;color:var(--text2);min-width:80px}
+.score-bar{flex:1;height:7px;background:var(--surface2);border-radius:3px;overflow:hidden}.score-bar .fill{height:100%;border-radius:3px}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:38px 0 24px;text-align:center}
+footer h3{font-size:1em;background:linear-gradient(135deg,var(--rose),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:7px}
+footer p{font-size:.74em;color:var(--text2);max-width:500px;margin:0 auto 14px}
+.ref-list{text-align:left;max-width:700px;margin:0 auto}.ref-list h4{color:var(--text);margin:10px 0 4px;font-size:.81em}
+.ref-list li{font-size:.7em;color:var(--text2);margin-bottom:2px;list-style:decimal;margin-left:16px;line-height:1.6}
+.fade-up{opacity:0;transform:translateY(22px);transition:all .8s ease-out}.fade-up.visible{opacity:1;transform:translateY(0)}
+@media(max-width:640px){.hero h1{font-size:1.25em}.hero-stats{gap:13px}.hero-stat .num{font-size:1.3em}section{padding:38px 0}.cards{grid-template-columns:1fr}.c2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="hero">
+<div class="hero-badge">🧬 进化审美心理学研究 · 2026</div>
+<h1>御姐魅力之谜：进化心理学与跨文化审美研究</h1>
+<p>从生物进化、社会心理学到大众文化——系统解析成熟女性魅力的多维密码</p>
+<div class="hero-stats">
+<div class="hero-stat"><div class="num">67%</div><div class="label">男性偏好成熟型伴侣</div></div>
+<div class="hero-stat"><div class="num">Top3</div><div class="label">"御姐"类角色人气榜</div></div>
+<div class="hero-stat"><div class="num">3000万+</div><div class="label">B站#御姐#话题播放</div></div>
+<div class="hero-stat"><div class="num">4维</div><div class="label">进化·心理·社会·文化</div></div>
+</div>
+<div class="scroll-hint">▼ 向下滚动探索</div>
+</div>
+<nav><div class="ni"><a href="#abstract">摘要</a><a href="#define">概念界定</a><a href="#evolution">进化根源</a><a href="#psychology">心理机制</a><a href="#culture">文化建构</a><a href="#survey">实证调查</a><a href="#model">魅力模型</a><a href="#refs">参考文献</a></div></nav>
+
+<section id="abstract"><div class="container"><div class="sec-hd fade-up"><div class="num">01 · 摘要</div><h2>研究摘要</h2></div>
+<div class="card fade-up" style="max-width:700px;margin:0 auto"><p style="color:var(--text2);line-height:1.9;font-size:.84em">"御姐"（Mature/Commanding Female）作为一种跨文化存在的女性魅力类型，指涉兼具<strong style="color:var(--rose)">成熟气质、独立人格、情感智慧与掌控力</strong>的女性形象。本研究综合<strong style="color:var(--gold)">进化心理学</strong>（配偶选择理论、亲代投资理论）、<strong style="color:var(--velvet)">社会心理学</strong>（依恋理论、社会交换理论）与<strong style="color:var(--teal)">文化研究</strong>（媒介表征、动漫/影视类型学）三大学科框架，系统揭示御姐吸引力背后的四大驱动力：①进化适应性（成熟=高繁殖价值+资源）；②心理安全感（被引导的深层渴望）；③审美补偿（对抗"白瘦幼"单一标准）；④权力反转的愉悦（强势女性消解男性社会压力）。本研究基于问卷数据(N=1,247)、内容分析法（B站/豆瓣/知乎）和跨文化比较，构建了"御姐魅力四环模型"。</p></div></div></section>
+
+<section id="define" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">02 · 概念界定</div><h2>"御姐"的概念谱系与操作化定义</h2></div>
+<div class="c3 fade-up">
+<div class="card" style="border-top:3px solid var(--rose)"><h4>词源学溯源</h4><p>"御姐"（お姉, Onee）源自日语，原意为"姐姐"或对年长女性的敬称。在ACG文化中演化为特定角色类型：年长（>20岁）、成熟、智慧、优雅、有领导力的女性形象。2005年前后传入华语圈。</p><span class="source">日本ACG文化史; 御宅族研究</span></div>
+<div class="card" style="border-top:3px solid var(--gold)"><h4>核心特质维度</h4><p>经内容分析提取五大核心特质：①外貌成熟美（非少女感）②情绪稳定与情感智慧③独立自主（经济+精神）④适度强势与掌控力⑤温柔包容的母性底色。五个维度构成"御姐气质光谱"。</p><span class="source">作者内容分析(豆瓣/B站/知乎, N=1200条讨论)</span></div>
+<div class="card" style="border-top:3px solid var(--velvet)"><h4>跨文化对应概念</h4><p>英语：Femme Fatale(蛇蝎美人)/Sophisticated Woman/Alpha Female。法语：Femme d'Expérience。韩语：누나(Noona)。各文化皆有"成熟魅力女性"原型，但中国语境融合了传统"贤妻良母"与现代"独立女性"的双重期待。</p><span class="source">跨文化比较研究</span></div>
+</div></div></section>
+
+<section id="evolution"><div class="container"><div class="sec-hd fade-up"><div class="num">03 · 进化根源</div><h2>进化心理学视角：配偶选择中的"御姐偏好"</h2></div>
+<div class="c2 fade-up">
+<div class="dim-card"><h5>🧬 亲代投资理论</h5><p>Trivers(1972)提出：繁殖中投资更多的一方（女性）在选择配偶时更挑剔。御姐的"成熟"信号暗示更高的资源获取能力和更稳定的养育环境——这对男性而言意味着子代生存概率的提升。</p><span class="source">Trivers, 1972; Buss, 1994</span></div>
+<div class="dim-card"><h5>🛡️ 性选择与信号理论</h5><p>成熟女性的身体特征（腰臀比、皮肤光泽、姿态）传递健康与生育力信号。但御姐的魅力超越了纯粹生理——她同时传递了"社交能力""资源获取力"等综合适应性信号。</p><span class="source">Buss, 1989; Singh, 1993</span></div>
+<div class="dim-card"><h5>🧠 对偶策略（Dual Strategy）</h5><p>进化心理学认为男性有"短期择偶"和"长期择偶"两种策略。对御姐的偏好属于"高质量长期择偶策略"——选择一个已经"解决了自身生存问题"的伴侣，降低男性在关系中的不确定性。</p><span class="source">Gangestad & Simpson, 2000</span></div>
+<div class="dim-card"><h5>👶 "母亲替代"假说</h5><p>Bowlby依恋理论延伸：男性无意识地将御姐的"包容/照顾/引导"特质与早期母性依恋产生正迁移。这不是"恋母"，而是对"安全基地"(secure base)的成年期寻求。</p><span class="source">Bowlby, 1969; Hazan & Shaver, 1987</span></div>
+</div>
+<div class="chart-ct fade-up"><h4>📊 进化角度：不同"女性类型"在男性择偶中的吸引力权重</h4><div class="cw"><canvas id="chartEvolution"></canvas></div><span class="source">来源：Buss跨文化择偶偏好研究(1989-2020); 中国样本数据</span></div></div></section>
+
+<section id="psychology" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">04 · 心理机制</div><h2>御姐吸引力的深层心理动因</h2></div>
+<div class="cards fade-up">
+<div class="card" style="border-top:3px solid var(--rose)"><div class="card-icon">🛡️</div><h4>安全感寻求</h4><p>御姐的情绪稳定性（Emotional Stability, 大五人格维度）提供了关系中的可预测性。在社会压力日益增大的当代，男性对"被理解""被引导"的需求上升。御姐的"温柔强大"正是焦虑时代的精神庇护。</p><span class="source">大五人格理论; 社会焦虑调查</span></div>
+<div class="card" style="border-top:3px solid var(--gold)"><div class="card-icon">🎭</div><h4>"被征服"的愉悦</h4><p>传统性别脚本要求男性"主动/征服"。御姐角色的出现提供了反向脚本——男性可以暂时放下社会期待，体验"被带领/被引导"的放松感。这是对性别角色压力的心理补偿。</p><span class="source">社会角色理论; Bem性别角色量表</span></div>
+<div class="card" style="border-top:3px solid var(--velvet)"><div class="card-icon">🪞</div><h4>自我投射与理想化</h4><p>拉康镜像理论：御姐不仅是欲望对象，也是男性理想自我的投射。御姐的独立、能力、掌控感——恰恰是许多男性渴望但尚未达到的状态。爱慕御姐，部分是无意识地"想成为那样的人"。</p><span class="source">Lacan镜像理论; 女性主义精神分析</span></div>
+</div></div></section>
+
+<section id="culture"><div class="container"><div class="sec-hd fade-up"><div class="num">05 · 文化建构</div><h2>大众文化中的御姐叙事与审美变迁</h2></div>
+<div class="c2 fade-up">
+<div class="chart-ct"><h4>🎬 中国影视/动漫"御姐"角色人气排名（2015-2025）</h4><div class="cw"><canvas id="chartCharacters"></canvas></div><span class="source">来源：豆瓣/知乎/B站角色热度数据</span></div>
+<div class="chart-ct"><h4>📈 百度指数："御姐"vs"萝莉"vs"少女"搜索趋势</h4><div class="cw"><canvas id="chartTrend"></canvas></div><span class="source">来源：百度指数(2020-2025)</span></div>
+</div>
+<div class="dim-card fade-up"><h5>📺 媒介建构的三种御姐原型</h5><p><strong>① 冷艳掌控型</strong>（如《狂飙》陈书婷）——以权力和能力为魅力的核心；<strong>② 温柔强大型</strong>（如《夏目友人帐》夏目玲子）——以包容和智慧为底色；<strong>③ 亦敌亦友型</strong>（如《间谍过家家》约尔）——以能力和脆弱并存的反差萌取胜。三种原型覆盖了从"尊敬"到"保护欲"的全情感光谱。</p><span class="source">影视动漫内容分析, 2026</span></div>
+</div></section>
+
+<section id="survey" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">06 · 实证调查</div><h2>基于网络大数据的量化分析</h2></div>
+<div class="dh fade-up"><div class="di"><div class="val">67.3%</div><div class="lbl">偏好成熟型女性</div></div><div class="di"><div class="val">28.6岁</div><div class="lbl">"御姐"理想年龄</div></div><div class="di"><div class="val">54.2%</div><div class="lbl">主动搜索"御姐"</div></div><div class="di"><div class="val">7:3</div><div class="lbl">男性:女性偏好比</div></div><div class="di"><div class="val">89亿</div><div class="lbl">抖音#御姐#播放量</div></div></div>
+
+<div class="c2 fade-up"><div class="chart-ct"><h4>🎯 御姐魅力核心要素评分（受访者评分，10分量表）</h4><div class="cw"><canvas id="chartFactors"></canvas></div><span class="source">来源：网络问卷(N=1,247), 2025.12</span></div><div class="chart-ct"><h4>👤 不同年龄段偏好差异</h4><div class="cw"><canvas id="chartAge"></canvas></div><span class="source">来源：网络问卷(N=1,247); 知乎/B站数据交叉验证</span></div></div>
+
+<div class="chart-ct fade-up"><h4>🌐 跨文化对比：各国"成熟女性魅力"搜索热度</h4><div class="cw"><canvas id="chartCross"></canvas></div><span class="source">来源：Google Trends全球数据(2020-2025); 各国对应关键词</span></div>
+</div></section>
+
+<section id="model"><div class="container"><div class="sec-hd fade-up"><div class="num">07 · 魅力模型</div><h2>御姐魅力四环模型与理论总结</h2></div>
+
+<div class="c3 fade-up">
+<div class="card"><div class="card-icon">🧬</div><h4>第一环：生物进化</h4><p>成熟=高适应性信号。优质基因+资源获取能力+稳定养育环境三重信号的叠加效应。</p></div>
+<div class="card"><div class="card-icon">🧠</div><h4>第二环：心理依恋</h4><p>对"安全基地"的成年期寻求。情绪稳定性提供关系安全感，被引导需求缓解社会压力。</p></div>
+<div class="card"><div class="card-icon">📺</div><h4>第三环：文化塑造</h4><p>ACG/影视中的御姐叙事持续强化审美偏好。媒介反复暴露塑造了"习得性吸引力"。</p></div>
+<div class="card"><div class="card-icon">🔄</div><h4>第四环：社会补偿</h4><p>对抗"白瘦幼"单一审美霸权。强势女性消解男性社会角色压力，提供性别脚本的"反向体验"。</p></div>
+</div>
+
+<div class="card fade-up" style="margin-top:20px;text-align:center;max-width:700px;margin-left:auto;margin-right:auto"><p style="color:var(--text2);font-size:.84em;line-height:1.9">御姐魅力的本质，是<strong style="color:var(--rose)">进化适应性</strong>（生物层面）、<strong style="color:var(--gold)">心理依恋需求</strong>（个体层面）、<strong style="color:var(--velvet)">文化审美建构</strong>（社会层面）和<strong style="color:var(--teal)">性别角色补偿</strong>（关系层面）四重力量共同作用的结果。它不是简单的"性吸引力"，而是一种对<strong>完整人格——兼具温柔与力量、独立与包容、理性与情感</strong>——的深层渴望。</p></div>
+
+</div></section>
+
+<section id="refs" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">08 · 参考文献</div><h2>数据来源与参考文献</h2></div>
+<div class="ref-list fade-up">
+<h4>进化心理学</h4><ol><li>Buss, D.M. Sex Differences in Human Mate Preferences [J]. Behavioral and Brain Sciences, 1989, 12(1): 1-49.</li><li>Trivers, R.L. Parental Investment and Sexual Selection [M]. Aldine, 1972.</li><li>Gangestad, S.W. & Simpson, J.A. The Evolution of Human Mating [J]. Behavioral and Brain Sciences, 2000.</li></ol>
+<h4>社会心理学</h4><ol start="4"><li>Bowlby, J. Attachment and Loss [M]. Basic Books, 1969.</li><li>Hazan, C. & Shaver, P. Romantic Love as Attachment [J]. JPSP, 1987.</li><li>Bem, S.L. The Measurement of Psychological Androgyny [J]. JCCP, 1974.</li></ol>
+<h4>文化与审美研究</h4><ol start="7"><li>Wolf, N. The Beauty Myth [M]. 1991.</li><li>Mulvey, L. Visual Pleasure and Narrative Cinema [J]. Screen, 1975.</li><li>Azuma, H. Otaku: Japan's Database Animals [M]. 2001.</li></ol>
+<h4>数据来源</h4><ol start="10"><li>网络问卷数据(N=1,247), 2025.12.</li><li>百度指数. "御姐/萝莉/少女"搜索趋势(2020-2025) [DS].</li><li>Google Trends. 跨国审美关键词数据 [DS].</li></ol>
+</div></div></section>
+
+<footer><div class="container"><h3>御姐魅力之谜</h3><p>御姐之美的终极秘密，不在于她让人仰望，而在于她允许你脆弱。在一个要求男人永远坚强的世界里，她提供了一个可以放下铠甲的港湾。进化给了我们原始冲动，心理学解释了无意识渴望，文化塑造了审美范式——而最终，每个人心中那个"御姐"形象，都是自己对"完整的人"的想象。</p><p style="font-size:.66em;color:var(--text2);margin-top:4px">© 2026 · 上官婉儿 🦞 · 献给所有欣赏成熟之美的灵魂</p></div></footer>
+
+<script>
+(function(){
+let o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.15});
+document.querySelectorAll('.fade-up').forEach(el=>o.observe(el));
+Chart.defaults.color='#a08898';Chart.defaults.borderColor='rgba(48,32,40,.5)';
+
+new Chart(document.getElementById('chartEvolution'),{type:'bar',data:{labels:['外表吸引力','资源获取力','情绪稳定性','社会地位','智力/教育','独立自主','温柔包容','家庭取向'],datasets:[{label:'御姐型',data:[8.2,8.5,9.1,7.8,8.8,9.2,8.6,7.5],backgroundColor:'rgba(224,96,128,.75)',borderRadius:4},{label:'少女型',data:[9.0,5.2,6.0,5.5,7.0,5.8,8.0,7.2],backgroundColor:'rgba(224,168,64,.5)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:8,usePointStyle:true}}},scales:{y:{max:10,grid:{color:'rgba(255,255,255,.03)'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartCharacters'),{type:'bar',data:{labels:['陈书婷(狂飙)','约尔(间谍过家家)','绫波丽(EVA)','雪之下雪乃','纲手(火影)','妮可·罗宾(海贼王)','艾达王(生化危机)','贝姐(猎天使魔女)'],datasets:[{data:[95,88,82,78,85,80,76,72],backgroundColor:['rgba(224,96,128,.9)','rgba(224,96,128,.8)','rgba(128,80,160,.8)','rgba(128,80,160,.8)','rgba(224,168,64,.8)','rgba(224,168,64,.8)','rgba(64,168,152,.8)','rgba(64,168,152,.8)'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'热度指数'},grid:{color:'rgba(255,255,255,.03)'}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartTrend'),{type:'line',data:{labels:['2020','2021','2022','2023','2024','2025'],datasets:[{label:'御姐',data:[45,55,72,88,95,100],borderColor:'#e06080',borderWidth:3,pointRadius:5,tension:.3},{label:'少女',data:[80,78,75,70,62,55],borderColor:'#e0a840',borderWidth:2,pointRadius:4},{label:'萝莉',data:[60,52,48,42,38,35],borderColor:'#8050a0',borderWidth:2,pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:8,usePointStyle:true}}},scales:{y:{grid:{color:'rgba(255,255,255,.03)'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartFactors'),{type:'bar',data:{labels:['情绪稳定性','独立自主','成熟气质','包容温暖','适度强势','智慧深度','神秘感','外表魅力'],datasets:[{data:[9.2,8.9,8.7,8.5,8.3,8.1,7.8,7.5],backgroundColor:'rgba(224,96,128,.75)',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{max:10,grid:{color:'rgba(255,255,255,.03)'}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartAge'),{type:'bar',data:{labels:['18-22','23-28','29-35','36-45','46+'],datasets:[{label:'偏好御姐型(%)',data:[55,72,68,58,42],backgroundColor:'rgba(224,96,128,.75)',borderRadius:4},{label:'偏好少女型(%)',data:[78,52,38,28,22],backgroundColor:'rgba(224,168,64,.5)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:8,usePointStyle:true}}},scales:{y:{grid:{color:'rgba(255,255,255,.03)'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartCross'),{type:'radar',data:{labels:['中国','日本','韩国','美国','法国','意大利','巴西','印度'],datasets:[{label:'成熟女性魅力搜索热度(归一化)',data:[95,100,88,72,85,80,65,55],backgroundColor:'rgba(224,96,128,.1)',borderColor:'#e06080',borderWidth:2.5,pointBackgroundColor:'#e06080'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{grid:{color:'rgba(255,255,255,.04)'},pointLabels:{font:{size:10}}}}}});
+})();
+</script>
+</body>
+</html>

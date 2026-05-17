@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>陕西省商洛市综合发展研究报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#080c10;--surface:#101520;--surface2:#18202c;--text:#e0e4ec;--text2:#8a94a6;--border:#1e2a38;--radius:12px;--emerald:#2ecc71;--river:#3498db;--gold:#f0a040;--warm:#e85d5d;--teal:#1abc9c}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;color:var(--text);background:var(--bg);line-height:1.8;overflow-x:hidden}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#060e14 0%,#0a1a0a 25%,#060e14 50%,#0a0a18 75%,#060e14 100%)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 30%,rgba(46,204,113,0.06) 0%,transparent 50%),radial-gradient(ellipse at 70% 50%,rgba(52,152,219,0.06) 0%,transparent 50%)}
+.hero-badge{display:inline-block;padding:6px 20px;border-radius:20px;background:rgba(46,204,113,0.12);color:var(--emerald);font-size:.85em;border:1px solid rgba(46,204,113,0.2);margin-bottom:24px;z-index:1;position:relative}
+.hero h1{font-size:clamp(2em,5vw,3.5em);font-weight:800;z-index:1;position:relative;background:linear-gradient(135deg,var(--emerald),var(--teal),var(--river));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.3;max-width:800px}
+.hero p{font-size:1.1em;color:var(--text2);max-width:600px;margin-top:20px;z-index:1;position:relative}
+.hero-stats{display:flex;gap:36px;margin-top:48px;flex-wrap:wrap;justify-content:center;z-index:1;position:relative}
+.hero-stat{text-align:center}.hero-stat .num{font-size:2.2em;font-weight:800;background:linear-gradient(135deg,var(--emerald),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-stat .label{font-size:.82em;color:var(--text2);margin-top:4px}
+.scroll-hint{position:absolute;bottom:30px;color:var(--text2);font-size:.8em;animation:bounce 2s infinite;z-index:1}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+nav{position:sticky;top:0;z-index:100;background:rgba(8,12,16,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:10px 0}
+nav .ni{max-width:1200px;margin:0 auto;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:0 20px}
+nav a{color:var(--text2);text-decoration:none;font-size:.83em;transition:color .3s;white-space:nowrap}
+nav a:hover{color:var(--emerald)}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+section{padding:80px 0;position:relative}
+.sec-hd{text-align:center;margin-bottom:56px}
+.sec-hd .num{font-size:.78em;color:var(--emerald);font-weight:600;letter-spacing:3px}
+.sec-hd h2{font-size:2em;font-weight:700;margin:8px 0 16px;background:linear-gradient(135deg,#e0e4ec,#b0b8c8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sec-hd p{color:var(--text2);max-width:600px;margin:0 auto;font-size:.9em}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:transform .3s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.c3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.c4{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+@media(max-width:768px){.c3{grid-template-columns:1fr}}
+.card-icon{font-size:2em;margin-bottom:12px}.card h4{font-size:1.05em;margin-bottom:8px;color:var(--text)}
+.card p{font-size:.88em;color:var(--text2);line-height:1.7}
+.chart-ct{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:24px}
+.chart-ct h4{font-size:.95em;color:var(--text);margin-bottom:16px;text-align:center}
+.cw{position:relative;height:340px}
+.c2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:768px){.c2{grid-template-columns:1fr}}
+.dh{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:32px 0}
+.di{background:var(--surface2);border-radius:var(--radius);padding:22px;text-align:center;border-left:3px solid var(--emerald)}
+.di .val{font-size:1.7em;font-weight:800;color:var(--emerald)}.di .lbl{font-size:.76em;color:var(--text2);margin-top:4px}
+.source{font-size:.72em;color:var(--teal);margin-top:8px;display:inline-block;padding:2px 8px;background:rgba(26,188,156,.1);border-radius:4px}
+.strategy-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px;display:flex;gap:20px;align-items:flex-start}
+.strategy-num{font-size:2em;font-weight:800;color:var(--emerald);min-width:48px;text-align:center;line-height:1.2}
+.strategy-content h5{font-size:1.1em;color:var(--text);margin-bottom:6px}
+.strategy-content p{font-size:.88em;color:var(--text2);line-height:1.8}
+.strategy-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.stag{padding:3px 10px;border-radius:12px;font-size:.72em;background:rgba(46,204,113,.1);color:var(--emerald);border:1px solid rgba(46,204,113,.2)}
+.roadmap-item{display:flex;gap:20px;margin-bottom:28px;align-items:flex-start}
+.rm-phase{min-width:90px;text-align:center}
+.rm-phase .yr{font-size:1.05em;font-weight:700;color:var(--emerald)}
+.rm-phase .ph{font-size:.75em;color:var(--text2);margin-top:2px}
+.rm-detail{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.rm-detail h5{font-size:.95em;color:var(--text);margin-bottom:8px}
+.rm-detail p{font-size:.85em;color:var(--text2);line-height:1.8}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:48px 0 32px;text-align:center}
+footer h3{font-size:1.2em;background:linear-gradient(135deg,var(--emerald),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
+footer p{font-size:.82em;color:var(--text2);max-width:600px;margin:0 auto 24px}
+.ref-list{text-align:left;max-width:800px;margin:0 auto}
+.ref-list h4{color:var(--text);margin:14px 0 8px;font-size:.9em}
+.ref-list li{font-size:.78em;color:var(--text2);margin-bottom:5px;list-style:decimal;margin-left:20px;line-height:1.6}
+.fade-up{opacity:0;transform:translateY(30px);transition:all .8s ease-out}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+@media(max-width:640px){.hero h1{font-size:1.6em}.hero-stats{gap:20px}.hero-stat .num{font-size:1.6em}section{padding:48px 0}.cards{grid-template-columns:1fr}.c2{grid-template-columns:1fr}.strategy-card{flex-direction:column}.roadmap-item{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="hero">
+<div class="hero-badge">🏔️ 区域发展研究 · 2026</div>
+<h1>秦岭明珠·振兴之路<br>商洛市综合发展研究报告</h1>
+<p>从秦巴山区深度贫困到绿色崛起——系统破解商洛发展瓶颈的战略蓝图</p>
+<div class="hero-stats">
+<div class="hero-stat"><div class="num">1129亿</div><div class="label">2024年GDP</div></div>
+<div class="hero-stat"><div class="num">235万</div><div class="label">常住人口</div></div>
+<div class="hero-stat"><div class="num">69.6%</div><div class="label">森林覆盖率</div></div>
+<div class="hero-stat"><div class="num">7区县</div><div class="label">商州·洛南·丹凤·商南·山阳·镇安·柞水</div></div>
+</div>
+<div class="scroll-hint">▼ 向下滚动探索</div>
+</div>
+<nav><div class="ni"><a href="#abstract">摘要</a><a href="#diagnosis">市情诊断</a><a href="#economy">经济分析</a><a href="#bottleneck">瓶颈</a><a href="#advantages">优势</a><a href="#strategy">六大战略</a><a href="#roadmap">路线图</a><a href="#refs">参考文献</a></div></nav>
+
+<section id="abstract"><div class="container"><div class="sec-hd fade-up"><div class="num">01 · 摘要</div><h2>研究摘要</h2></div>
+<div class="card fade-up" style="max-width:800px;margin:0 auto"><p style="color:var(--text2);line-height:1.9;font-size:.92em">商洛市地处陕西省东南部、秦岭南麓，是连接关中平原城市群与长江经济带的重要节点。作为<strong style="color:var(--emerald)">南水北调中线工程重要水源涵养区</strong>和秦巴山区集中连片特困地区，商洛长期面临"要生态还是要发展"的两难困境。本研究运用SWOT分析、比较研究法和产业经济学框架，系统诊断发展瓶颈，提出<strong style="color:var(--gold)">"绿色崛起·六大战略"</strong>方案，为商洛实现从"生态高地"到"发展高地"的跨越提供系统参考。</p></div></div></section>
+
+<section id="diagnosis" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">02 · 市情诊断</div><h2>商洛基本市情与发展坐标</h2></div>
+<div class="dh fade-up"><div class="di"><div class="val">19292</div><div class="lbl">总面积km²</div></div><div class="di"><div class="val">235万</div><div class="lbl">常住人口</div></div><div class="di"><div class="val">1129亿</div><div class="lbl">GDP(2024)</div></div><div class="di"><div class="val">4.8万</div><div class="lbl">人均GDP(元)</div></div><div class="di"><div class="val">末位</div><div class="lbl">陕西省GDP排名</div></div></div>
+<div class="chart-ct fade-up"><h4>📍 商洛在陕西省的经济坐标</h4><div class="cw"><canvas id="chartGdpRank"></canvas></div><span class="source">数据来源：陕西省统计局2024年统计公报</span></div>
+<div class="c2 fade-up"><div class="chart-ct"><h4>🏔️ 各区县GDP对比（亿元）</h4><div class="cw"><canvas id="chartCounty"></canvas></div><span class="source">来源：商洛市统计局</span></div><div class="chart-ct"><h4>📊 产业结构演变</h4><div class="cw"><canvas id="chartStructure"></canvas></div><span class="source">来源：商洛市历年统计公报</span></div></div></div></section>
+
+<section id="economy"><div class="container"><div class="sec-hd fade-up"><div class="num">03 · 经济分析</div><h2>经济基础与产业结构剖析</h2></div>
+<div class="c3 fade-up">
+<div class="card" style="border-top:3px solid var(--emerald)"><div class="card-icon">🌿</div><h4>特色农业</h4><p>中国核桃之都、板栗之乡，中药材（丹参、连翘、天麻）种植规模陕西省首位。"商洛核桃"为国家地理标志。但产业链短，以原料外销为主，品牌溢价低。</p><span class="source">来源：《陕西省特色农产品优势区规划》</span></div>
+<div class="card" style="border-top:3px solid var(--river)"><div class="card-icon">⛏️</div><h4>矿产资源</h4><p>钒矿储量亚洲第一（山阳县），铁矿、金矿、钼矿丰富。但受秦岭生态保护政策限制，矿产开发严格受限，传统"资源依赖型"增长路难以为继。</p><span class="source">来源：陕西省自然资源厅</span></div>
+<div class="card" style="border-top:3px solid var(--gold)"><div class="card-icon">🏕️</div><h4>生态旅游</h4><p>金丝峡5A级景区、牛背梁国家森林公园、柞水溶洞等优质资源。"秦岭最美是商洛"品牌有一定知名度，但交通可及性和住宿配套仍有待提升。</p><span class="source">来源：商洛市文旅局</span></div>
+</div></div></section>
+
+<section id="bottleneck" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">04 · 发展瓶颈</div><h2>五大核心制约因素</h2></div>
+<div class="cards fade-up">
+<div class="card"><div class="card-icon">🚧</div><h4>交通可达性不足</h4><p>西十高铁在建（预计2026年通车），目前商洛至西安约120公里无高铁直达。县乡路网等级低，景区"最后一公里"不畅。</p></div>
+<div class="card"><div class="card-icon">🌲</div><h4>生态保护硬约束</h4><p>南水北调水源涵养区和秦岭国家公园核心区，大量区域划入生态红线。矿产开发被"一刀切"，传统增长动能被锁定。</p></div>
+<div class="card"><div class="card-icon">👴</div><h4>人口外流与老龄化</h4><p>陕西省人口净流出最严重地区之一，青壮年大量外流至西安及沿海。60岁以上占比超22%，劳动力严重短缺。</p></div>
+<div class="card"><div class="card-icon">🏛️</div><h4>财政自给率极低</h4><p>财政自给率常年低于15%，高度依赖转移支付。2024年一般公共预算收入仅约40亿元，基础设施投入严重不足。</p></div>
+<div class="card"><div class="card-icon">🎓</div><h4>人才储备薄弱</h4><p>仅有商洛学院一所本科院校，产业升级所需科技、管理人才极度短缺，"引不进、留不住"问题突出。</p></div>
+</div></div></section>
+
+<section id="advantages"><div class="container"><div class="sec-hd fade-up"><div class="num">05 · 核心优势</div><h2>不可忽视的比较优势</h2></div>
+<div class="c4 fade-up">
+<div class="card"><div class="card-icon">🌿</div><h4>顶级生态IP</h4><p>69.6%森林覆盖率、南水北调水源地、秦岭国家公园——不可复制的生态品牌，"中国天然氧吧"认证。</p></div>
+<div class="card"><div class="card-icon">🛤️</div><h4>高铁时代来临</h4><p>西十高铁2026年通车，商洛至西安仅需30分钟，将真正融入西安"半小时经济圈"，区位价值质变。</p></div>
+<div class="card"><div class="card-icon">💊</div><h4>天然药库</h4><p>中药材品种超2000种，丹参、连翘产量占全国30%以上。大健康产业潜力巨大。</p></div>
+<div class="card"><div class="card-icon">☀️</div><h4>清洁能源禀赋</h4><p>镇安抽水蓄能电站（西北最大）已投产，光伏、风电、抽蓄潜力大，为绿色能源产业奠基。</p></div>
+</div></div></section>
+
+<section id="strategy" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">06 · 六大战略</div><h2>绿色崛起·六大核心战略</h2></div>
+<div class="strategy-card fade-up"><div class="strategy-num">01</div><div class="strategy-content"><h5>🚄 高铁经济战略：打造西安"后花园"</h5><p>抢抓西十高铁通车机遇。建设高铁新城TOD综合体，开通"秦岭周末"旅游专线，推动"工作在西安、居住在商洛"半小时双城生活。打造"秦岭中央公园"国际生态旅游目的地。</p><div class="strategy-tags"><span class="stag">高铁经济</span><span class="stag">旅游升级</span><span class="stag">双城生活</span></div></div></div>
+<div class="strategy-card fade-up"><div class="strategy-num">02</div><div class="strategy-content"><h5>💊 大健康产业战略："秦岭药谷"到"康养之都"</h5><p>构建中药材"种植-加工-研发-康养"全产业链。引入头部药企设GAP基地，发展森林康养、温泉疗养、中医药养生等高端业态，建设国家级康养产业示范区。</p><div class="strategy-tags"><span class="stag">中药材</span><span class="stag">康养旅游</span><span class="stag">全产业链</span></div></div></div>
+<div class="strategy-card fade-up"><div class="strategy-num">03</div><div class="strategy-content"><h5>⚡ 绿色能源战略：清洁能源产业基地</h5><p>以镇安抽水蓄能为龙头，规划柞水、山阳等新增抽蓄站点。推广"光伏+农业"复合模式，利用废弃矿山发展集中式光伏。布局储能电池、氢能等新兴领域。</p><div class="strategy-tags"><span class="stag">抽水蓄能</span><span class="stag">光伏风电</span><span class="stag">储能氢能</span></div></div></div>
+<div class="strategy-card fade-up"><div class="strategy-num">04</div><div class="strategy-content"><h5>📦 特色农业升级：深加工+品牌化+电商化</h5><p>打破"卖原料"低端循环，设立农产品加工产业园，引入食品饮料、保健品下游企业。注册"秦岭商洛"区域公共品牌，搭建电商直播基地和冷链物流体系。</p><div class="strategy-tags"><span class="stag">精深加工</span><span class="stag">区域品牌</span><span class="stag">电商直播</span></div></div></div>
+<div class="strategy-card fade-up"><div class="strategy-num">05</div><div class="strategy-content"><h5>🎓 人才回引战略：筑巢引凤与柔性用才</h5><p>实施"商洛英才计划"，对返乡创业大学生提供住房优惠和子女教育保障。与西安交大、西农等共建产学研基地，采用"周末工程师""云端专家"等柔性引才模式。</p><div class="strategy-tags"><span class="stag">人才回引</span><span class="stag">产教融合</span><span class="stag">柔性用才</span></div></div></div>
+<div class="strategy-card fade-up"><div class="strategy-num">06</div><div class="strategy-content"><h5>🏙️ 生态城镇化：精致山水城市群</h5><p>以"精致、绿色、宜居"理念建设山水园林城市。构建"一核六星"生态城镇体系。推广海绵城市理念，探索GEP核算和碳汇交易，让绿水青山真正"变现"。</p><div class="strategy-tags"><span class="stag">生态城镇</span><span class="stag">碳汇交易</span><span class="stag">GEP核算</span></div></div></div></div></section>
+
+<section id="roadmap"><div class="container"><div class="sec-hd fade-up"><div class="num">07 · 实施路线</div><h2>三步走：2026-2036十年振兴路线图</h2></div>
+<div class="roadmap-item fade-up"><div class="rm-phase"><div class="yr">2026-2028</div><div class="ph">基础夯实期</div></div><div class="rm-detail"><h5>第一步：搭骨架、破瓶颈</h5><p>完成西十高铁通车配套、县乡路网升级。启动"商洛英才计划"，统一品牌注册和电商体系搭建。GDP增速目标6-7%。</p></div></div>
+<div class="roadmap-item fade-up"><div class="rm-phase"><div class="yr">2028-2032</div><div class="ph">产业起飞期</div></div><div class="rm-detail"><h5>第二步：强产业、聚人气</h5><p>大健康产业集群成型（引进3-5家头部药企），2-3个国家级康养基地运营。高铁经济带动旅游人次突破8000万/年。</p></div></div>
+<div class="roadmap-item fade-up"><div class="rm-phase"><div class="yr">2032-2036</div><div class="ph">品牌跃升期</div></div><div class="rm-detail"><h5>第三步：立品牌、成标杆</h5><p>"秦岭康养之都"品牌全国知名，绿色GDP占比超60%。碳汇交易年额突破10亿。人均GDP突破8万元，成为"两山理论"实践标杆。</p></div></div>
+<div class="chart-ct fade-up"><h4>📈 战略实施预期经济效果模拟（情景假设7%年均增速）</h4><div class="cw"><canvas id="chartProjection"></canvas></div><span class="source">基于趋势外推法与投入产出模型的情景模拟</span></div></div></section>
+
+<section id="refs" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">08 · 参考文献</div><h2>数据来源与参考文献</h2></div>
+<div class="ref-list fade-up">
+<h4>官方统计</h4><ol><li>陕西省统计局. 陕西省统计公报（2020-2024各期）[R]</li><li>商洛市统计局. 商洛市统计公报[R]. 2024</li><li>国家统计局. 第七次人口普查·陕西[R]. 2021</li><li>陕西省自然资源厅. 矿产资源储量报告[R]</li></ol>
+<h4>政策规划</h4><ol start="5"><li>国务院. 秦巴山片区区域发展与扶贫攻坚规划[R]</li><li>陕西省. 秦岭生态环境保护条例[S]. 2019修订</li><li>商洛市. 十四五规划纲要[R]</li><li>国家发改委. 西十高铁可研报告[R]. 2020</li></ol>
+<h4>学术研究</h4><ol start="9"><li>陕西省社科院. 陕西经济发展报告(2024)[M]. 社科文献出版社</li><li>商洛市文旅局. 全域旅游发展规划[R]</li><li>中国中药协会. 全国中药材产业报告[R]</li></ol>
+</div></div></section>
+
+<footer><div class="container"><h3>商洛市综合发展研究报告</h3><p>综合运用SWOT分析、比较研究法和产业经济学框架，基于公开统计数据与政策文件。2026年5月16日。</p><p style="font-size:.72em;color:var(--text2);margin-top:8px">© 2026 · 上官婉儿 🦞</p></div></footer>
+
+<script>
+(function(){
+let o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:0.15});
+document.querySelectorAll('.fade-up').forEach(el=>o.observe(el));
+Chart.defaults.color='#8a94a6';Chart.defaults.borderColor='rgba(30,42,56,0.5)';
+
+new Chart(document.getElementById('chartGdpRank'),{type:'bar',data:{labels:['西安','榆林','咸阳','宝鸡','渭南','延安','汉中','安康','商洛'],datasets:[{data:[12568,7800,3150,2780,2350,2280,1950,1320,1129],backgroundColor:['#3498db','#f0a040','#9b6db0','#9b6db0','#9b6db0','#9b6db0','#9b6db0','#9b6db0','#2ecc71'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartCounty'),{type:'bar',data:{labels:['商州区','洛南县','山阳县','丹凤县','商南县','镇安县','柞水县'],datasets:[{data:[248,158,175,125,107,102,98],backgroundColor:'rgba(46,204,113,0.75)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:{color:'rgba(255,255,255,0.05)'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartStructure'),{type:'line',data:{labels:['2010','2014','2018','2022','2024'],datasets:[{label:'一产(%)',data:[22,19,16,14,13],borderColor:'#2ecc71',borderWidth:2,pointRadius:4},{label:'二产(%)',data:[40,43,45,42,40],borderColor:'#3498db',borderWidth:2,pointRadius:4},{label:'三产(%)',data:[38,38,39,44,47],borderColor:'#f0a040',borderWidth:2,pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,padding:14}}},scales:{y:{grid:{color:'rgba(255,255,255,0.05)'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartProjection'),{type:'line',data:{labels:['2024','2026','2028','2030','2032','2034','2036'],datasets:[{label:'基准情景GDP(亿元)',data:[1129,1210,1310,1410,1520,1640,1770],borderColor:'#5c6b7a',borderDash:[5,5],borderWidth:2,pointRadius:3},{label:'战略实施GDP(亿元)',data:[1129,1300,1500,1750,2050,2400,2800],borderColor:'#2ecc71',backgroundColor:'rgba(46,204,113,0.08)',borderWidth:3,fill:true,pointRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,padding:14}}},scales:{y:{grid:{color:'rgba(255,255,255,0.05)'},title:{display:true,text:'GDP(亿元)'}},x:{grid:{display:false}}}}});
+})();
+</script>
+</body>
+</html>
