@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国农村养老困境研究报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0a0806;--surface:#1a1410;--surface2:#241c14;--text:#f0e8d8;--text2:#988870;--border:#302818;--radius:12px;--earth:#b87840;--straw:#d0a050;--clay:#c05838;--moss:#5a9040;--sky:#6088a8;--rust:#a04828}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;color:var(--text);background:var(--bg);line-height:1.8;overflow-x:hidden}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#080604 0%,#0e0c08 30%,#080604 60%,#100c08 100%)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 40% 35%,rgba(184,120,64,.05) 0%,transparent 50%),radial-gradient(ellipse at 60% 60%,rgba(192,88,56,.04) 0%,transparent 45%)}
+.hero-badge{display:inline-block;padding:6px 20px;border-radius:20px;background:rgba(184,120,64,.12);color:var(--earth);font-size:.85em;border:1px solid rgba(184,120,64,.2);margin-bottom:24px;z-index:1;position:relative}
+.hero h1{font-size:clamp(1.4em,4vw,2.4em);font-weight:800;z-index:1;position:relative;background:linear-gradient(135deg,var(--straw),var(--clay),var(--earth));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.3;max-width:660px}
+.hero p{font-size:.92em;color:var(--text2);max-width:510px;margin-top:14px;z-index:1;position:relative}
+.hero-stats{display:flex;gap:22px;margin-top:34px;flex-wrap:wrap;justify-content:center;z-index:1;position:relative}
+.hero-stat{text-align:center}.hero-stat .num{font-size:1.55em;font-weight:800;background:linear-gradient(135deg,var(--straw),var(--clay));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-stat .label{font-size:.68em;color:var(--text2);margin-top:2px}
+.scroll-hint{position:absolute;bottom:22px;color:var(--text2);font-size:.66em;animation:bounce 2s infinite;z-index:1}@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,8,6,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:9px 0}nav .ni{max-width:1050px;margin:0 auto;display:flex;gap:11px;justify-content:center;flex-wrap:wrap;padding:0 16px}nav a{color:var(--text2);text-decoration:none;font-size:.77em;transition:color .3s;white-space:nowrap}nav a:hover{color:var(--straw)}
+.container{max-width:1000px;margin:0 auto;padding:0 22px}section{padding:58px 0}
+.sec-hd{text-align:center;margin-bottom:42px}.sec-hd .num{font-size:.7em;color:var(--straw);font-weight:600;letter-spacing:3px}
+.sec-hd h2{font-size:1.65em;font-weight:700;margin:4px 0 7px;background:linear-gradient(135deg,#f0e8d8,#c0a890);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:19px;transition:transform .3s}.card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.c2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:768px){.c2{grid-template-columns:1fr}}
+.c3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}@media(max-width:768px){.c3{grid-template-columns:1fr}}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.card-icon{font-size:1.35em;margin-bottom:6px}.card h4{font-size:.88em;margin-bottom:4px;color:var(--text)}.card p{font-size:.74em;color:var(--text2);line-height:1.7}
+.chart-ct{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:15px}.chart-ct h4{font-size:.82em;color:var(--text);margin-bottom:9px;text-align:center}.cw{position:relative;height:280px}
+.source{font-size:.6em;color:var(--moss);margin-top:3px;display:inline-block;padding:1px 5px;background:rgba(90,144,64,.1);border-radius:4px}
+.dh{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:20px 0}
+.di{background:var(--surface2);border-radius:var(--radius);padding:13px;text-align:center;border-left:3px solid var(--earth)}.di .val{font-size:1.2em;font-weight:800;color:var(--earth)}.di .lbl{font-size:.62em;color:var(--text2);margin-top:2px}
+.dim-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:11px;border-left:3px solid var(--straw)}
+.dim-card h5{font-size:.84em;color:var(--text);margin-bottom:4px}.dim-card p{font-size:.73em;color:var(--text2)}
+.highlight{background:linear-gradient(135deg,var(--surface),#241c10);border:1px solid var(--straw);border-radius:var(--radius);padding:22px;margin:16px 0;text-align:center}
+.highlight h4{color:var(--straw);font-size:.9em;margin-bottom:5px}.highlight p{color:var(--text2);font-size:.74em;max-width:560px;margin:0 auto}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:36px 0 20px;text-align:center}
+footer h3{font-size:.88em;background:linear-gradient(135deg,var(--straw),var(--clay));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+footer p{font-size:.66em;color:var(--text2);max-width:460px;margin:0 auto 10px}
+.ref-list{text-align:left;max-width:660px;margin:0 auto}.ref-list h4{color:var(--text);margin:10px 0 3px;font-size:.78em}.ref-list li{font-size:.64em;color:var(--text2);margin-bottom:2px;list-style:decimal;margin-left:14px;line-height:1.6}
+.fade-up{opacity:0;transform:translateY(20px);transition:all .8s ease-out}.fade-up.visible{opacity:1;transform:translateY(0)}
+.story-card{background:linear-gradient(135deg,var(--surface),#201810);border:1px solid var(--straw);border-radius:var(--radius);padding:24px;margin:18px 0;text-align:center}
+.story-card h5{color:var(--straw);font-size:.9em;margin-bottom:6px}.story-card p{color:var(--text2);font-size:.76em;font-style:italic;max-width:560px;margin:0 auto}
+@media(max-width:640px){.hero h1{font-size:1.15em}.hero-stats{gap:10px}.hero-stat .num{font-size:1.15em}section{padding:34px 0}.cards{grid-template-columns:1fr}.c2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="hero">
+<div class="hero-badge">🌾 农村老龄化研究 · 2026</div>
+<h1>无人守望的田埂：中国农村养老困境研究</h1>
+<p>当2.9亿人进城打工，谁在照顾农村那1.2亿留守老人的最后一程？</p>
+<div class="hero-stats">
+<div class="hero-stat"><div class="num">1.2亿</div><div class="label">农村60岁以上老人</div></div>
+<div class="hero-stat"><div class="num">23.8%</div><div class="label">农村老龄化率(>城市8%)</div></div>
+<div class="hero-stat"><div class="num">188元/月</div><div class="label">农村居民月均养老金</div></div>
+<div class="hero-stat"><div class="num">84%</div><div class="label">依赖子女供养</div></div>
+</div>
+<div class="scroll-hint">▼ 向下滚动探索</div>
+</div>
+<nav><div class="ni"><a href="#abstract">摘要</a><a href="#reality">现状图景</a><a href="#roots">困境根源</a><a href="#groups">重点群体</a><a href="#compare">城乡对比</a><a href="#solutions">解决路径</a><a href="#refs">参考文献</a></div></nav>
+
+<section id="abstract"><div class="container"><div class="sec-hd fade-up"><div class="num">01 · 摘要</div><h2>研究摘要</h2></div>
+<div class="card fade-up" style="max-width:680px;margin:0 auto"><p style="color:var(--text2);line-height:1.9;font-size:.78em">中国农村的养老问题呈现"<strong style="color:var(--straw)">三重叠加</strong>"特征：老龄化程度远高于城市（23.8% vs 15.8%）、养老保障远低于城市（农村月均养老金188元 vs 城镇职工3,577元）、家庭照料能力严重流失（超6,000万留守老人子女不在身边）。本研究基于国家统计局、民政部、中国老年社会追踪调查(CLASS)等权威数据，系统分析农村养老的四大困境根源——<strong style="color:var(--clay)">制度性的城乡养老二元结构</strong>、<strong style="color:var(--clay)">人口外流导致的家庭空壳化</strong>、<strong style="color:var(--clay)">土地养老功能的瓦解</strong>、<strong style="color:var(--clay)">农村养老服务的市场失灵</strong>——并提出系统性解决方案。</p></div></div></section>
+
+<section id="reality" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">02 · 现状图景</div><h2>农村养老的量化全景</h2></div>
+<div class="dh fade-up"><div class="di"><div class="val">23.8%</div><div class="lbl">农村60+占比</div></div><div class="di"><div class="val">15.8%</div><div class="lbl">城市60+占比</div></div><div class="di"><div class="val">6,400万</div><div class="lbl">曾为留守儿童</div></div><div class="di"><div class="val">47%</div><div class="lbl">空巢老人比例</div></div><div class="di"><div class="val">3,577元</div><div class="lbl">城镇月均养老金</div></div></div>
+<div class="c2 fade-up"><div class="chart-ct"><h4>🏘️ 农村 vs 城市老龄化率对比（2000-2025）</h4><div class="cw"><canvas id="chartAging"></canvas></div><span class="source">来源：国家统计局; 中国城乡老年人口状况追踪调查</span></div><div class="chart-ct"><h4>💰 城乡养老金差距：月均待遇（2005-2025）</h4><div class="cw"><canvas id="chartPension"></canvas></div><span class="source">来源：人社部; 国家统计局</span></div></div>
+<div class="chart-ct fade-up"><h4>⚕️ 农村老人健康与自理能力评估</h4><div class="cw"><canvas id="chartHealth"></canvas></div><span class="source">来源：中国老年社会追踪调查CLASS 2024; 国家卫健委</span></div></div></section>
+
+<section id="roots"><div class="container"><div class="sec-hd fade-up"><div class="num">03 · 困境根源</div><h2>农村养老困境的四大结构性根源</h2></div>
+<div class="cards fade-up">
+<div class="card" style="border-top:3px solid var(--clay)"><div class="card-icon">🏛️</div><h4>制度根源：城乡养老的"两个中国"</h4><p>城镇职工基本养老保险月均3,577元，城乡居民养老保险月均仅188元——相差19倍。农村养老金替代率不足10%（城镇>45%）。2009年才建立新农保制度，多数老人缴费年限不足，"制度起步晚+缴费低+年限短"导致养老待遇塌陷。</p><span class="source">人社部; 中国社科院</span></div>
+<div class="card" style="border-top:3px solid var(--earth)"><div class="card-icon">🚶</div><h4>人口根源：青壮年"雁南飞"</h4><p>2.9亿农民工中80%来自农村。50岁以下青壮年几乎全部外出，"389961部队"（妇女、老人、儿童）留守农村。子女异地打工→家庭照料断裂→老人"自养"成为常态。"以儿养老"的传统契约被城市化打破。</p><span class="source">国家统计局农民工监测报告</span></div>
+<div class="card" style="border-top:3px solid var(--straw)"><div class="card-icon">🌾</div><h4>经济根源：土地养老功能的瓦解</h4><p>人均1.3亩耕地，亩均年净收入不足500元。土地流转后规模化经营，老人失去"种地自养"能力。粮价长期低迷+农资成本高涨，传统"土地是最后的保障"已不成立。农村老人陷入"土地不值钱但离不开地"的困境。</p><span class="source">农业农村部; 自然资源部</span></div>
+<div class="card" style="border-top:3px solid var(--sky)"><div class="card-icon">🏥</div><h4>服务根源：养老的"市场失灵"</h4><p>农村养老服务面临"三缺"：缺设施（每千名老人不足3张床位，且集中分布在乡镇）、缺人才（养老护理员年流失率40%+，月薪不足2,000元）、缺支付意愿（老人月收入200多元无力购买服务）。纯市场逻辑无法覆盖农村养老。</p><span class="source">民政部; 中国老龄协会</span></div>
+</div></div></section>
+
+<section id="groups" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">04 · 重点群体</div><h2>农村养老的四大困境者</h2></div>
+<div class="c2 fade-up">
+<div class="dim-card"><h5>👴 空巢独居老人</h5><p>全国约5,800万农村空巢老人（占农村老年人口的47%）。子女全部外出务工，无人照料日常起居。慢性病患病率76%，但规律服药率不足40%。"死后几天才被发现"的社会新闻每年数十起——是农村最脆弱、最孤独的老年群体。</p><span class="source">CLASS 2024; 中国老龄事业发展基金会</span></div>
+<div class="dim-card"><h5>👵 高龄失能老人</h5><p>农村80岁以上老人约2,900万，失能/半失能超1,400万。然而农村长期照护体系基本为空白——专业养老机构集中在县城以上，乡镇敬老院仅收"五保户"且条件极差。多数由年迈配偶照料（"以老養老"），照护者本身也是老人。</p><span class="source">国家卫健委; 民政部</span></div>
+<div class="dim-card"><h5>🧑‍🌾 "老漂族"：随迁城市的两难老人</h5><p>超2,000万农村老人为帮子女带孩子而迁移到城市。没有城市户口，享受不到当地养老服务；医保跨省结算难；社交网络断裂、语言文化隔阂。"在城市是外地人，回农村是无根人"。</p><span class="source">国家卫健委流动人口报告</span></div>
+<div class="dim-card"><h5>⚕️ 因病致贫老年群体</h5><p>农村老年贫困发生率17.5%（城市4.2%）。新农合报销比例仅50-60%且封顶线低，一场大病=倾家荡产。"小病扛、大病拖、重病等死"不是夸张，是许多农村老人的真实选择。因病致贫占农村返贫人口的42%。</p><span class="source">国务院扶贫办; 卫健委医疗保障局</span></div>
+</div></div></section>
+
+<section id="compare"><div class="container"><div class="sec-hd fade-up"><div class="num">05 · 城乡对比</div><h2>"两个中国"的养老现实——城乡鸿沟全维度对照</h2></div>
+<div class="chart-ct fade-up"><h4>⚖️ 城乡养老全维度差距（标准化指数，城市=100）</h4><div class="cw"><canvas id="chartGap"></canvas></div><span class="source">来源：国家统计局/人社部/卫健委/民政部综合数据</span></div>
+<div class="c3 fade-up">
+<div class="card"><div class="card-icon">🏥</div><h4>医疗可及性</h4><p>城市每千人床位6.5张，农村仅3.2张。乡镇卫生院医生本科以上学历不足30%。急救车到村最远需1.5小时。</p></div>
+<div class="card"><div class="card-icon">🏠</div><h4>居住条件</h4><p>农村老人独居率38%（城市12%），冬季取暖靠煤炉者超过60%，适老化改造率接近零——门槛、楼梯对老人是巨大的安全风险。</p></div>
+<div class="card"><div class="card-icon">📱</div><h4>数字鸿沟</h4><p>农村老人智能手机普及率不足30%。电子医保卡、线上挂号、网约车——数字化服务便利了年轻人，却将不会用手机的老人彻底隔绝。</p></div>
+</div></div></section>
+
+<section id="solutions" style="background:var(--surface)"><div class="container"><div class="sec-hd fade-up"><div class="num">06 · 解决路径</div><h2>从"养老困境"到"老有所养"</h2></div>
+<div class="c3 fade-up">
+<div class="card" style="border-top:3px solid var(--moss)"><h4>🟢 制度兜底</h4><p>城乡居民基础养老金从188元/月提高到500元以上，达贫困线以上；建立全国统一的长期护理保险覆盖农村；打通城乡养老保险互转通道。</p></div>
+<div class="card" style="border-top:3px solid var(--earth)"><h4>🟡 在地养老</h4><p>每个乡镇至少一个区域性养老服务中心（日间照料+全托+上门服务）；发展"互助养老"（低龄老人照顾高龄老人，积分兑换未来照护）；盘活闲置校舍/民居改为养老点。</p></div>
+<div class="card" style="border-top:3px solid var(--straw)"><h4>🔴 医疗下沉</h4><p>乡镇卫生院全部配备全科医生；推动"县域医共体"让县级医院医生轮岗到村；AI远程问诊+家庭医生签约覆盖每一个行政村。</p></div>
+<div class="card" style="border-top:3px solid var(--sky)"><h4>📱 数字赋能</h4><p>为农村老人开发极端简化的适老终端（一键呼救+语音操作+大字界面）；适老化改造纳入乡村振兴基建（防滑/扶手/照明）。</p></div>
+<div class="card" style="border-top:3px solid var(--clay)"><h4>🏡 产业回流</h4><p>通过发展县城经济、农产品深加工、乡村旅游，创造"离家近"的就业机会，让子女不必远走他乡。1个回流就业=2个老人得到照料。</p></div>
+<div class="card" style="border-top:3px solid var(--moss)"><h4>👥 社会组织补位</h4><p>鼓励社工机构、志愿者组织、慈善基金下沉农村。政府购买服务+社会组织运营——以低于公办机构30%的成本，提供更灵活的在地养老服务。</p></div>
+</div>
+<div class="chart-ct fade-up"><h4>📊 改革前后对比：解决路径的预期效果（2025→2035）</h4><div class="cw"><canvas id="chartEffect"></canvas></div><span class="source">来源：基于国务院发展研究中心/中国社科院/世界银行研究的综合预测</span></div></div></section>
+
+<section id="refs"><div class="container"><div class="sec-hd fade-up"><div class="num">07 · 参考文献</div><h2>数据来源与参考文献</h2></div>
+<div class="ref-list fade-up">
+<h4>核心数据源</h4><ol><li>国家统计局. 第七次全国人口普查公报; 2025年国民经济和社会发展统计公报[R].</li><li>中国老龄协会. 中国城乡老年人口状况追踪调查报告(2024)[R].</li><li>中国人民大学. 中国老年社会追踪调查(CLASS 2024)[DS].</li><li>人社部. 人力资源和社会保障事业发展统计公报[R].</li></ol>
+<h4>学术研究</h4><ol start="5"><li>杜鹏等. 中国农村养老服务：挑战与路径[J]. 中国社会科学, 2020.</li><li>世界银行. 中国养老保障制度改革研究[R]. 2021.</li><li>国务院发展研究中心. 中国发展报告2024：积极应对人口老龄化[R].</li></ol>
+<h4>政策文件</h4><ol start="8"><li>国务院. "十四五"国家老龄事业发展和养老服务体系规划[S]. 2022.</li><li>民政部. 关于推进基本养老服务体系建设的意见[S]. 2023.</li><li>WHO. 中国老龄化与健康国家评估报告[R].</li></ol>
+</div></div></section>
+
+<footer><div class="container"><h3>无人守望的田埂</h3><p>他们种了一辈子粮食，养活了中国的工业化，却在人生的最后时光里，只能在田埂上独自等待。农村养老不该是"等死"——他们值得一个体面的晚年。</p><p style="font-size:.62em;color:var(--text2);margin-top:3px">© 2026 · 上官婉儿 🦞</p></div></footer>
+
+<script>
+(function(){
+let o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.15});
+document.querySelectorAll('.fade-up').forEach(el=>o.observe(el));
+Chart.defaults.color='#988870';Chart.defaults.borderColor='rgba(48,40,24,.5)';
+
+new Chart(document.getElementById('chartAging'),{type:'line',data:{labels:['2000','2005','2010','2015','2020','2025'],datasets:[{label:'农村60+占比(%)',data:[10.5,13.2,15.0,18.5,22.3,23.8],borderColor:'#c05838',borderWidth:3,pointRadius:5},{label:'城市60+占比(%)',data:[8.5,11.0,12.3,13.5,15.0,15.8],borderColor:'#6088a8',borderWidth:3,pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:6,usePointStyle:true}}},scales:{y:{grid:{color:'rgba(255,255,255,.03)'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartPension'),{type:'bar',data:{labels:['2005','2010','2015','2020','2025'],datasets:[{label:'城镇职工月均(元)',data:[925,1362,2318,3336,3577],backgroundColor:'rgba(96,136,168,.75)',borderRadius:4},{label:'农村居民月均(元)',data:[0,55,100,152,188],backgroundColor:'rgba(192,88,56,.75)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:6,usePointStyle:true}}},scales:{y:{grid:{color:'rgba(255,255,255,.03)'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartHealth'),{type:'bar',data:{labels:['完全自理','轻度依赖','中度失能','重度失能'],datasets:[{label:'农村老人(万人)',data:[7800,2400,1100,700],backgroundColor:['rgba(90,144,64,.7)','rgba(208,160,80,.7)','rgba(184,120,64,.7)','rgba(192,88,56,.7)'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'人数(万)'},grid:{color:'rgba(255,255,255,.03)'}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chartGap'),{type:'radar',data:{labels:['养老金','医疗可及','养老服务','居住条件','社交网络','经济收入','数字接入'],datasets:[{label:'城市(=100)',data:[100,100,100,100,100,100,100],borderColor:'#6088a8',borderWidth:2,pointRadius:3},{label:'农村',data:[5,42,18,35,28,31,22],borderColor:'#c05838',backgroundColor:'rgba(192,88,56,.06)',borderWidth:3,pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:6,usePointStyle:true}}},scales:{r:{min:0,max:110,grid:{color:'rgba(255,255,255,.04)'},pointLabels:{font:{size:9}},ticks:{display:false}}}}});
+
+new Chart(document.getElementById('chartEffect'),{type:'bar',data:{labels:['基础养老金','失能照护','村医覆盖率','养老机构','空巢率','老年贫困率'],datasets:[{label:'当前',data:[188,5,52,2.8,47,17.5],backgroundColor:'rgba(192,88,56,.75)',borderRadius:4},{label:'2035目标',data:[500,40,90,8,25,5],backgroundColor:'rgba(90,144,64,.75)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{padding:6,usePointStyle:true}}},scales:{y:{grid:{color:'rgba(255,255,255,.03)'}},x:{grid:{display:false}}}}});
+})();
+</script>
+</body>
+</html>
