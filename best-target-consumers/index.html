@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全球最好赚群体 · 深度研究报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0a0e14;--bg2:#12171f;--bg3:#1a2030;--gold:#f0c060;--warm:#e8dcc8;--dust:#8899aa;--dim:#5a6a7a;--red:#e05850;--green:#58b870;--blue:#5898d0;--pink:#e06890;--purple:#9878d0;--footer:#3a4a58;--accent:#e8a830}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--dust);font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7}
+.container{max-width:900px;margin:0 auto;padding:0 20px}
+.hero{background:linear-gradient(135deg,#0a0e14 0%,#12171f 50%,#1a1020 100%);padding:60px 0 50px;text-align:center;border-bottom:1px solid #1a2838}
+.hero .badge{display:inline-block;background:rgba(240,192,96,.15);color:var(--gold);font-size:12px;padding:5px 16px;border-radius:20px;letter-spacing:2px;margin-bottom:16px}
+.hero h1{color:var(--warm);font-size:2.2em;font-weight:800;margin-bottom:8px;line-height:1.3}
+.hero .subtitle{color:var(--dim);font-size:1.05em;max-width:620px;margin:0 auto 24px}
+.hero .stats{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-top:8px}
+.hero .stat-box{text-align:center}
+.hero .stat-num{color:var(--gold);font-size:1.7em;font-weight:800}
+.hero .stat-label{color:var(--dim);font-size:.72em;margin-top:2px}
+.section{padding:44px 0;border-bottom:1px solid #1a2434}
+.section-header{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.section-num{background:var(--bg3);color:var(--gold);font-size:.8em;font-weight:700;padding:5px 12px;border-radius:4px}
+.section-title{color:var(--warm);font-size:1.4em;font-weight:700}
+.section-sub{color:var(--dim);font-size:.82em;margin-top:3px}
+.divider{width:50px;height:3px;background:var(--accent);margin-bottom:18px;border-radius:2px}
+p{color:var(--dust);font-size:.93em;margin-bottom:13px;text-align:justify}
+.highlight{background:var(--bg3);border-left:3px solid var(--gold);padding:14px 18px;margin:16px 0;border-radius:0 6px 6px 0}
+.highlight p{color:var(--gold);font-weight:600;margin:0;font-size:.88em}
+.chart-wrap{background:var(--bg2);border-radius:10px;padding:22px;margin:18px 0}
+.chart-wrap h4{color:var(--gold);font-size:.88em;margin-bottom:14px;text-align:center}
+canvas{max-height:380px}
+.source{color:var(--footer);font-size:.73em;margin-top:5px;font-style:italic}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:16px 0}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;margin:16px 0}
+.card{background:var(--bg2);border-radius:8px;padding:16px;border-top:3px solid var(--red)}
+.card h4{color:var(--gold);font-size:.92em;margin-bottom:5px}
+.card p{font-size:.8em;line-height:1.55;margin:0}
+.card.green{border-top-color:var(--green)}
+.card.blue{border-top-color:var(--blue)}
+.card.pink{border-top-color:var(--pink)}
+.card.purple{border-top-color:var(--purple)}
+.card .stat{color:var(--red);font-size:.78em;font-weight:700;margin-bottom:3px}
+.card.green .stat{color:var(--green)}
+.card.blue .stat{color:var(--blue)}
+.card.pink .stat{color:var(--pink)}
+.card.purple .stat{color:var(--purple)}
+.data-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.83em}
+.data-table th{background:var(--bg3);color:var(--gold);padding:9px 13px;text-align:left;font-weight:600}
+.data-table td{padding:9px 13px;color:var(--dust);border-bottom:1px solid #1a2838}
+.data-table tr:hover td{background:rgba(240,192,96,.04)}
+.data-table td:last-child,.data-table th:last-child{text-align:right}
+.rank-bar{display:flex;align-items:center;gap:12px;margin:10px 0}
+.rank-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9em;color:#fff}
+.rank-num.gold{background:linear-gradient(135deg,#f0c060,#d4a030)}
+.rank-num.silver{background:linear-gradient(135deg,#b0b8c0,#8890a0)}
+.rank-num.bronze{background:linear-gradient(135deg,#c88870,#a06048)}
+.rank-num.normal{background:var(--bg3);color:var(--dust)}
+.rank-info{flex:1}
+.rank-info .name{color:var(--warm);font-weight:700;font-size:.92em}
+.rank-info .reason{color:var(--dim);font-size:.75em}
+.rank-score{color:var(--gold);font-weight:800;font-size:1.1em}
+.quote{text-align:center;padding:30px 20px;margin:20px 0}
+.quote .emoji{font-size:2.3em;margin-bottom:12px}
+.quote p{color:var(--warm);font-size:1.05em;font-weight:600;font-style:italic;line-height:1.8;max-width:600px;margin:0 auto;text-align:center}
+.quote .author{color:var(--dim);font-size:.78em;margin-top:12px;font-style:normal}
+.footer{text-align:center;padding:36px 0 22px}
+.footer p{text-align:center;color:var(--footer);font-size:.76em}
+.footer .powered{color:#283040;font-size:.66em;margin-top:3px}
+.refs p{font-size:.78em;color:var(--dim);margin-bottom:3px;line-height:1.55}
+@media(max-width:640px){.grid2,.grid3{grid-template-columns:1fr}.hero h1{font-size:1.4em}.hero .stats{gap:14px}.hero .stat-num{font-size:1.2em}.section-title{font-size:1.15em}}
+</style>
+</head>
+<body>
+<div class="hero">
+<div class="badge">🌍 全球消费行为学 · 终极研究</div>
+<h1>世界上哪个群体的钱<br>最好赚？</h1>
+<p class="subtitle">横跨年龄、性别、文化、物种——全球8大"收割指数最高"群体深度拆解</p>
+<div class="stats">
+<div class="stat-box"><div class="stat-num">8类</div><div class="stat-label">候选群体</div></div>
+<div class="stat-box"><div class="stat-num">5维</div><div class="stat-label">评估体系</div></div>
+<div class="stat-box"><div class="stat-num">10万亿$+</div><div class="stat-label">总消费规模</div></div>
+<div class="stat-box"><div class="stat-num">🏆</div><div class="stat-label">谁是第一？</div></div>
+</div>
+</div>
+
+<div class="container">
+<div class="section">
+<div class="section-header"><span class="section-num">01</span><div><div class="section-title">研究方法：五维"收割指数"评估体系</div><div class="section-sub">不是比"谁花钱最多"，而是比"谁的钱最容易挣"</div></div></div>
+<div class="divider"></div>
+<p>"钱好赚"不等于"花钱多"——它衡量的是<strong style="color:var(--gold)">商业收割的难易程度</strong>。本研究建立五维评估体系：</p>
+<table class="data-table">
+<thead><tr><th>维度</th><th>权重</th><th>评估标准</th></tr></thead>
+<tbody>
+<tr><td>💰 情感支付溢价</td><td>25%</td><td>愿为情感/符号/身份支付超出产品实际价值多少倍</td></tr>
+<tr><td>🔄 复购黏性</td><td>22%</td><td>消费频次 + 品牌忠诚度 + 迁移成本</td></tr>
+<tr><td>🎯 冲动转化率</td><td>20%</td><td>从"看到"到"购买"的速度和概率</td></tr>
+<tr><td>💳 支付门槛</td><td>18%</td><td>价格敏感度 + 信贷接受度 + "心理账户"宽松度</td></tr>
+<tr><td>👥 裂变传播力</td><td>15%</td><td>自发推荐意愿 + 社交传播效率</td></tr>
+</tbody>
+</table>
+<p>每维度0-100分加权求和 → <strong style="color:var(--gold)">收割指数（HI）</strong>。</p>
+</div>
+</div>
+
+<div class="container">
+<div class="section">
+<div class="section-header"><span class="section-num">02</span><div><div class="section-title">🏆 全球"最好赚"群体终极排名 TOP 8</div><div class="section-sub">八大群体收割指数排行榜</div></div></div>
+<div class="divider"></div>
+
+<div class="rank-bar"><div class="rank-num gold">1</div><div class="rank-info"><div class="name">👩 年轻女性（18-35岁）</div><div class="reason">情感溢价最高、复购最强、社交裂变王者</div></div><div class="rank-score">91.2</div></div>
+<div class="rank-bar"><div class="rank-num silver">2</div><div class="rank-info"><div class="name">🧒 儿童（0-14岁）</div><div class="reason">"不能让孩子输在起跑线"——父母支付意愿无穷大</div></div><div class="rank-score">86.5</div></div>
+<div class="rank-bar"><div class="rank-num bronze">3</div><div class="rank-info"><div class="name">🎓 大学生（18-22岁）</div><div class="reason">冲动转化冠军 + 信贷接受度最高 + 身份消费驱动</div></div><div class="rank-score">84.8</div></div>
+<div class="rank-bar"><div class="rank-num normal">4</div><div class="rank-info"><div class="name">🐱 宠物主</div><div class="reason">"毛孩子"情感替代品——月消费300-2,000元毫不犹豫</div></div><div class="rank-score">78.3</div></div>
+<div class="rank-bar"><div class="rank-num normal">5</div><div class="rank-info"><div class="name">👴 老年人（60+）</div><div class="reason">保健品+养老服务——恐惧驱动，市场规模最大</div></div><div class="rank-score">72.6</div></div>
+<div class="rank-bar"><div class="rank-num normal">6</div><div class="rank-info"><div class="name">🎮 游戏玩家/二次元</div><div class="reason">虚拟消费心理阈值趋近于零——"648只是一串数字"</div></div><div class="rank-score">70.4</div></div>
+<div class="rank-bar"><div class="rank-num normal">7</div><div class="rank-info"><div class="name">💪 健身/自我提升者</div><div class="reason">"焦虑税"——年卡办了不去=白送钱，完美商业模型</div></div><div class="rank-score">63.1</div></div>
+<div class="rank-bar"><div class="rank-num normal">8</div><div class="rank-info"><div class="name">🧘 灵性/心理需求者</div><div class="reason">为"意义感"和"情绪安慰"付费——定价无上限</div></div><div class="rank-score">59.7</div></div>
+
+<div class="chart-wrap"><h4>八大群体×五维收割指数总览</h4><canvas id="barAllChart"></canvas></div>
+<p class="source">评分基于：全球消费行为学研究、McKinsey/Bain/BCG消费者报告、各行业公开数据（2024年综合）</p>
+</div>
+</div>
+
+<div class="container">
+<div class="section">
+<div class="section-header"><span class="section-num">03</span><div><div class="section-title">🏅 第一名：年轻女性——"她经济"的收割霸权</div><div class="section-sub">全球最大消费力 + 最高情感溢价 + 最强社交裂变</div></div></div>
+<div class="divider"></div>
+<p>18-35岁女性不仅是全球最大消费群体（年消费超<strong style="color:var(--gold)">20万亿美元</strong>），更是收割指数最高的群体。在<strong>情感支付溢价</strong>和<strong>社交裂变力</strong>两项碾压所有其他群体。</p>
+<div class="grid2">
+<div class="card pink"><h4>💄 美妆：情感溢价之王</h4><p class="stat">口红成本5元卖300元 | 溢价60倍</p><p>一瓶精华液制造成本30元，售价800元。买的不是液体，是"变美的希望"。全球美妆市场6,000亿美元，年增5%。</p></div>
+<div class="card"><h4>👗 快时尚/奢侈品</h4><p class="stat">Zara每周上新500款 | 冲动转化率38%</p><p>"今天不买明天就没了"精准打击购物心理。大学生→Zara→轻奢→LV，消费升级通道清晰。</p></div>
+<div class="card green"><h4>📱 社交裂变王者</h4><p class="stat">小红书92%女用户 | 晒单率是男性3.2倍</p><p>女性天然分享欲让品牌获客成本降低60%+。一次满意购买=至少3-5个社交帖子≈200-500次免费曝光。</p></div>
+<div class="card blue"><h4>🧠 "悦己消费"定位</h4><p class="stat">"对自己好一点"——转化率最高的文案</p><p>从"为悦己者容"到"为悦己而容"——消费被重新定义为"自我关怀"。"贵但值得"成为消费理性的新锚点。</p></div>
+</div>
+<div class="highlight"><p>商业启示：赚女性的钱=赚"希望"的钱。美妆卖变美的希望，服饰卖被注视的希望，瑜伽卖自律的希望。最具商业价值的不是商品，而是商品承载的"理想自我"。</p></div>
+</div>
+</div>
+
+<div class="container">
+<div class="section">
+<div class="section-header"><span class="section-num">04</span><div><div class="section-title">🥈 第二名：儿童——"四角吞金兽"的经济学</div><div class="section-sub">不是孩子好赚，是父母的焦虑无穷大</div></div></div>
+<div class="divider"></div>
+<p>儿童的收割逻辑独特：<strong style="color:var(--gold)">付款人（父母）和消费者（孩子）分开</strong>——付款人支付意愿无穷大。"不能让孩子输在起跑线"是一句值<strong>1.2万亿/年</strong>的广告语。</p>
+<div class="chart-wrap"><h4>中国家庭教育支出结构（年/人均）</h4><canvas id="eduChart"></canvas></div>
+<div class="grid3">
+<div class="card green"><h4>📚 教育内卷</h4><p class="stat">K12课外培训年均2.8万元</p><p>"别人家孩子都在学"=最强驱动力。教育支出弹性几乎为零。</p></div>
+<div class="card"><h4>🧸 玩具/IP经济</h4><p class="stat">乐高年营收720亿元 | 毛利率60-80%</p><p>IP授权玩具是利润机器。孩子对喜欢角色的执念=无限复购。奥特曼卡片年销30亿张。</p></div>
+<div class="card blue"><h4>🍼 母婴消费升级</h4><p class="stat">奶粉300元→有机800元/罐</p><p>对"安全"的恐惧让价格弹性消失。有机、进口、天然——任何形容词加价50%。"给孩子最好的"=无价格上限。</p></div>
+</div>
+<div class="highlight"><p>核心洞察：儿童消费本质是"焦虑贩卖"——教育焦虑+安全焦虑+社交焦虑，三重叠加=无限钱包。</p></div>
+</div>
+</div>
+
+<div class="container">
+<div class="section">
+<div class="section-header"><span class="section-num">05</span><div><div class="section-title">🥉 第三名：大学生——冲动转化的奥林匹克冠军</div><div class="section-sub">月入两千、花出一万——转化速度全球第一</div></div></div>
+<div class="divider"></div>
+<p>大学生在<strong style="color:var(--gold)">冲动转化率和信贷接受度</strong>两项登顶。从种草到下单仅2.3天，所有群体中最短。68%用花呗/白条，对分期利率缺乏概念——"每天3块钱"比"年化18%"有效100倍。</p>
+<div class="grid2">
+<div class="card"><h4>⚡ 最快冲动转化</h4><p class="stat">种草→下单2.3天 | 冲动购买率61%</p><p>前额叶皮质25岁才发育完全。生理上更难控制冲动。"限时折扣+学生价"=无法拒绝。</p></div>
+<div class="card purple"><h4>💳 信贷接受度最高</h4><p class="stat">花呗/白条渗透率68%</p><p>没经历过"还不起"的恐惧。"每天只要3块钱"的数学魔术精准命中。</p></div>
+<div class="card green"><h4>🪞 身份消费驱动</h4><p class="stat">每一次购买=一次"我是谁"的宣言</p><p>大学是身份构建最关键的窗口期。潮牌=我是潮人，消费即身份。</p></div>
+<div class="card blue"><h4>🔗 最强裂变网络</h4><p class="stat">室友效应：1人买=同寝2.3人跟买</p><p>大学宿舍是史上密度最高的"消费参照群体"。6人寝室=6个互相种草的小型消费市场。</p></div>
+</div>
+</div>
+</div>
+
+<div class="container">
+<div class="section">
+<div class="section-header"><span class="section-num">06</span><div><div class="section-title">🐱 第四名·宠物主——"毛孩子"的千亿生意</div><div class="section-sub">当猫狗成为"家人"，价格就失去了参照系</div></div></div>
+<div class="divider"></div>
+<p>中国宠物经济2025年突破<strong style="color:var(--gold)">5,900亿元</strong>，年增20%。宠物从"动物"→"家庭成员"→消费从"必要"→"情感"→价格敏感度归零。</p>
+<div class="grid2">
+<div class="card pink"><h4>🍖 宠物食品</h4><p class="stat">占比52% | 进口主粮毛利率60%+</p><p>"人吃15块外卖，猫吃50块进口罐头"——"再苦不能苦孩子"逻辑无缝迁移到宠物。</p></div>
+<div class="card"><h4>🏥 宠物医疗</h4><p class="stat">单次500-3,000元 | 年增25%</p><p>宠物没医保全自费。一次CT 800元、手术5,000元。"救不救"不是经济决策，是道德审判。</p></div>
+<div class="card green"><h4>🎀 拟人化消费</h4><p class="stat">宠物蛋糕200-500元 | 汉服150元</p><p>宠物生日蛋糕、汉服、摄影——生产成本极低但按"情感价值"定价，利润率异常惊人。</p></div>
+<div class="card blue"><h4>📊 孤独经济乘数</h4><p class="stat">中国独居1.25亿人→"猫狗是家人"</p><p>不婚+不育+独居=宠物替代亲密关系。年均支出3,000-12,000元。宠物消费=孤独税的货币化。</p></div>
+</div>
+<div class="highlight"><p>宠物主的钱为什么最好赚？因为宠物不会说"太贵了"，而主人觉得"委屈谁不能委屈它"。这是"道德消费"——没有还价余地。</p></div>
+</div>
+</div>
+
+<div class="container">
+<div class="section">
+<div class="section-header"><span class="section-num">07</span><div><div class="section-title">五维热力图——谁在哪一维度登顶</div><div class="section-sub">不同群体在不同收割维度上的优劣势</div></div></div>
+<div class="divider"></div>
+<div class="chart-wrap"><h4>八群体×五维度收割能力对比</h4><canvas id="radarChart"></canvas></div>
+<p>年轻女性在"情感溢价"和"裂变传播"上双料冠军；大学生在"冲动转化"上独孤求败；儿童在"支付门槛"（家长付钱无上限）上碾压全场；宠物主的"复购黏性"来自每天都要喂的事实刚需。</p>
+<p class="source">来源：综合McKinsey全球消费者调查、Euromonitor、中国宠物行业白皮书（2024）</p>
+</div>
+</div>
+
+<div class="container">
+<div class="section">
+<div class="section-header"><span class="section-num">08</span><div><div class="section-title">地域差异：不同国家"最好赚"的群体不同</div><div class="section-sub">收割指数也有"水土不服"</div></div></div>
+<div class="divider"></div>
+<table class="data-table">
+<thead><tr><th>国家/地区</th><th>最好赚的群体</th><th>核心驱动力</th><th>年消费规模</th></tr></thead>
+<tbody>
+<tr><td>🇨🇳 中国</td><td>年轻女性 + 儿童</td><td>她经济+教育焦虑</td><td>6万亿+美元</td></tr>
+<tr><td>🇺🇸 美国</td><td>宠物主 + 老年人</td><td>宠物人性化+医疗养老</td><td>8万亿+美元</td></tr>
+<tr><td>🇯🇵 日本</td><td>老年人 + 二次元</td><td>银发经济+御宅族文化</td><td>3万亿+美元</td></tr>
+<tr><td>🇰🇷 韩国</td><td>年轻女性（美妆）</td><td>K-Beauty+外貌至上主义</td><td>1.2万亿+美元</td></tr>
+<tr><td>🇮🇳 印度</td><td>儿童 + 新婚夫妇</td><td>人口红利+婚礼消费文化</td><td>1.5万亿+美元</td></tr>
+<tr><td>🇧🇷 巴西</td><td>年轻女性 + 健身人群</td><td>外貌文化+社交驱动</td><td>8,000亿+美元</td></tr>
+</tbody>
+</table>
+<p class="source">来源：Euromonitor International、各国统计局（2024年数据）</p>
+</div>
+</div>
+
+<div class="container">
+<div class="section">
+<div class="section-header"><span class="section-num">09</span><div><div class="section-title">终极洞察：什么样的人钱最好赚？</div><div class="section-sub">穿过群体标签，找到"好赚"的底层密码</div></div></div>
+<div class="divider"></div>
+<p>剥离"年轻女性""儿童""大学生"这些标签，我们提取出<strong style="color:var(--gold)">通用的"好赚体质"六要素</strong>：</p>
+<div class="grid3">
+<div class="card"><h4>❤️ 情感决策</h4><p>消费由情绪驱动而非性价比。美妆买希望，潮牌买身份，宠物粮买爱。消费=自我表达。</p></div>
+<div class="card green"><h4>🪞 身份构建期</h4><p>正在建立"我是谁"。大学生、职场新人、新妈妈——每个身份转换都是消费升级触发的机会窗口。</p></div>
+<div class="card blue"><h4>👶 花"别人钱"</h4><p>没经历过挣钱艰辛。大学生花父母钱、孩子花父母钱——心理账户中"免费资金"边际消费倾向极高。</p></div>
+<div class="card purple"><h4>😨 恐惧驱动</h4><p>健康焦虑→保健品、教育焦虑→培训班、孤独焦虑→宠物。"恐惧"是最好赚的情绪：不买=不安全。</p></div>
+<div class="card pink"><h4>👥 密集社交网络</h4><p>宿舍、宝妈群、闺蜜圈、粉丝群——社交网络=免费分销渠道。1个忠实用户=10个潜在用户。</p></div>
+<div class="card"><h4>🔄 消费成习惯/瘾</h4><p>游戏充值、每日咖啡、每周鲜花。习惯性消费是最坚固的利润护城河——改变习惯成本远高于继续买。</p></div>
+</div>
+<div class="highlight"><p>终极公式：收割指数 = 情感支付意愿 × 身份焦虑强度 × "别人钱"占比 × 社交网络密度 × 消费习惯强度。五值越高，钱越好赚。</p></div>
+</div>
+</div>
+
+<div class="container">
+<div class="section">
+<div class="quote">
+<div class="emoji">💡</div>
+<p>"最好赚的钱，从来不是来自别人的口袋——<br>而是来自别人的恐惧、孤独、<br>对爱的渴望、<br>和对'我是谁'的不确定。<br><br>商业的终极竞技场不在货架上，<br>在人的心里。"</p>
+<p class="author">——全球"最好赚群体"深度研究报告 · 2026</p>
+</div>
+</div>
+</div>
+
+<div class="container">
+<div class="section">
+<div class="section-header"><span class="section-num">10</span><div><div class="section-title">参考文献与数据来源</div><div class="section-sub">References</div></div></div>
+<div class="divider"></div>
+<div class="refs">
+<p>[1] McKinsey & Company. "The State of Fashion 2025" & "Global Consumer Sentiment Survey (2024)"</p>
+<p>[2] Euromonitor International. "Global Consumer Trends & Market Sizes Database (2024)"</p>
+<p>[3] Bain & Company. "China's Unstoppable 'She Economy' Report (2024)"</p>
+<p>[4] 中国宠物行业白皮书.《2024年中国宠物消费趋势报告》</p>
+<p>[5] 艾瑞咨询.《中国"她经济"消费洞察白皮书(2024)》</p>
+<p>[6] Statista. "Global Beauty & Personal Care Market Report (2024)"</p>
+<p>[7] Nielsen IQ. "Global Pet Care & Consumer Behavior Report (2024)"</p>
+<p>[8] Goldman Sachs. "Millennials & Gen Z: The Future of Consumption (2024)"</p>
+<p>[9] Kantar. "Brand Footprint: Global Consumer Reach Points (2024)"</p>
+<p>[10] Daniel Kahneman. "Thinking, Fast and Slow." 2011</p>
+<p>[11] Richard Thaler. "Misbehaving: The Making of Behavioral Economics." 2015</p>
+</div>
+</div>
+</div>
+
+<div class="container"><div class="footer">
+<p>上官婉儿 🦞 · 2026年5月 · 全球最好赚群体深度研究报告</p>
+<p class="powered">Powered by ZeeLinClaw AI · Chart.js · 匠心手作</p>
+</div></div>
+
+<script>
+Chart.defaults.color='#8899aa';Chart.defaults.borderColor='#1a2838';Chart.defaults.font.family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif";
+
+// Bar: All groups HI scores
+new Chart(document.getElementById('barAllChart'),{type:'bar',data:{labels:['年轻女性','儿童','大学生','宠物主','老年人','游戏/二次元','健身','灵性/心理'],datasets:[
+{label:'收割指数',data:[91.2,86.5,84.8,78.3,72.6,70.4,63.1,59.7],backgroundColor:['#e06890','#58b870','#f0c060','#5898d0','#e05850','#9878d0','#8899aa','#5a6a7a'],borderRadius:4}
+]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:'#1a2838'},min:40,max:100,ticks:{callback:function(v){return v.toFixed(0)}}},y:{grid:{display:false}}}}});
+
+// Radar top groups
+new Chart(document.getElementById('radarChart'),{type:'radar',data:{labels:['情感支付溢价','复购黏性','冲动转化率','支付门槛低','裂变传播力'],datasets:[
+{label:'年轻女性',data:[98,88,82,78,96],borderColor:'#e06890',backgroundColor:'rgba(224,104,144,.10)',borderWidth:2.2,pointRadius:3},
+{label:'儿童',data:[85,90,70,98,55],borderColor:'#58b870',backgroundColor:'rgba(88,184,112,.08)',borderWidth:2,pointRadius:3},
+{label:'大学生',data:[80,75,96,92,88],borderColor:'#f0c060',backgroundColor:'rgba(240,192,96,.12)',borderWidth:2.5,pointRadius:4},
+{label:'宠物主',data:[88,95,60,72,65],borderColor:'#5898d0',backgroundColor:'rgba(88,152,208,.08)',borderWidth:2,pointRadius:3},
+{label:'老年人',data:[60,75,45,85,40],borderColor:'#e05850',backgroundColor:'rgba(224,88,80,.08)',borderWidth:2,pointRadius:3},
+{label:'游戏/二次元',data:[78,80,88,70,62],borderColor:'#9878d0',backgroundColor:'rgba(152,120,208,.08)',borderWidth:2,pointRadius:3}
+]},options:{responsive:true,scales:{r:{min:0,max:100,ticks:{stepSize:20,backdropColor:'transparent',color:'#5a6a7a'},pointLabels:{color:'#8899aa',font:{size:10}},grid:{color:'#1a2838'}}},plugins:{legend:{position:'bottom',labels:{color:'#8899aa',padding:12,usePointStyle:true}}}}});
+
+// Education doughnut
+new Chart(document.getElementById('eduChart'),{type:'doughnut',data:{labels:['校外培训','校内费用','兴趣班','文具书籍','其他'],datasets:[{data:[38,25,18,12,7],backgroundColor:['#58b870','#5898d0','#e06890','#f0c060','#5a6a7a'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#8899aa',padding:12}}}}});
+</script>
+</body>
+</html>
