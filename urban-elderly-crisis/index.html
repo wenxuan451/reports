@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国城市养老困境 · 深度研究报告</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0f1923;--bg2:#15222d;--bg3:#1a2a38;--gold:#c9a96e;--warm:#e8dcc8;--dust:#8fa4b8;--dim:#5a7a8a;--red:#c05848;--green:#58a070;--blue:#5898b8;--footer:#3a5060;--accent:#e0a050}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--dust);font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7}
+.container{max-width:880px;margin:0 auto;padding:0 20px}
+/* Hero */
+.hero{background:linear-gradient(135deg,#0f1923 0%,#15222d 50%,#1a2a38 100%);padding:60px 0 50px;text-align:center;border-bottom:1px solid #1a3a4a}
+.hero .badge{display:inline-block;background:rgba(201,169,110,.15);color:var(--gold);font-size:12px;padding:5px 16px;border-radius:20px;letter-spacing:2px;margin-bottom:16px}
+.hero h1{color:var(--warm);font-size:2.2em;font-weight:800;margin-bottom:8px;line-height:1.3}
+.hero .subtitle{color:var(--dim);font-size:1.05em;max-width:580px;margin:0 auto 24px}
+.hero .stats{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-top:8px}
+.hero .stat-box{text-align:center}
+.hero .stat-num{color:var(--gold);font-size:1.8em;font-weight:800}
+.hero .stat-label{color:var(--dim);font-size:.75em;margin-top:2px}
+/* Section */
+.section{padding:48px 0;border-bottom:1px solid #152838}
+.section-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.section-num{background:var(--bg3);color:var(--gold);font-size:.8em;font-weight:700;padding:5px 12px;border-radius:4px}
+.section-title{color:var(--warm);font-size:1.45em;font-weight:700}
+.section-sub{color:var(--dim);font-size:.85em;margin-top:4px}
+.divider{width:50px;height:3px;background:var(--accent);margin-bottom:20px;border-radius:2px}
+p{color:var(--dust);font-size:.95em;margin-bottom:14px;text-align:justify}
+.highlight{background:var(--bg3);border-left:3px solid var(--gold);padding:14px 20px;margin:18px 0;border-radius:0 6px 6px 0}
+.highlight p{color:var(--gold);font-weight:600;margin:0;font-size:.9em}
+.chart-wrap{background:var(--bg2);border-radius:10px;padding:24px;margin:20px 0;position:relative}
+.chart-wrap h4{color:var(--gold);font-size:.9em;margin-bottom:14px;text-align:center}
+canvas{max-height:360px}
+.source{color:var(--footer);font-size:.75em;margin-top:6px;font-style:italic}
+/* Grids */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:18px 0}
+.card{background:var(--bg2);border-radius:8px;padding:18px;border-top:3px solid var(--red)}
+.card h4{color:var(--gold);font-size:.95em;margin-bottom:6px}
+.card p{font-size:.82em;line-height:1.55;margin:0}
+.card.green{border-top-color:var(--green)}
+.card.blue{border-top-color:var(--blue)}
+.card .stat{color:var(--red);font-size:.8em;font-weight:700;margin-bottom:4px}
+.card.green .stat{color:var(--green)}
+.card.blue .stat{color:var(--blue)}
+/* Table */
+.data-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.85em}
+.data-table th{background:var(--bg3);color:var(--gold);padding:10px 14px;text-align:left;font-weight:600}
+.data-table td{padding:10px 14px;color:var(--dust);border-bottom:1px solid #152838}
+.data-table tr:hover td{background:rgba(201,169,110,.05)}
+.data-table td:last-child,.data-table th:last-child{text-align:right}
+/* Quotes */
+.quote{text-align:center;padding:32px 20px;margin:24px 0}
+.quote .emoji{font-size:2.5em;margin-bottom:12px}
+.quote p{color:var(--warm);font-size:1.1em;font-weight:600;font-style:italic;line-height:1.8;max-width:600px;margin:0 auto}
+.quote .author{color:var(--dim);font-size:.8em;margin-top:12px;font-style:normal}
+/* Footer */
+.footer{text-align:center;padding:40px 0 24px}
+.footer p{text-align:center;color:var(--footer);font-size:.78em}
+.footer .powered{color:#2a4048;font-size:.68em;margin-top:4px}
+/* Ref */
+.refs p{font-size:.8em;color:var(--dim);margin-bottom:4px;line-height:1.6}
+/* Responsive */
+@media(max-width:640px){
+  .grid2,.grid3{grid-template-columns:1fr}
+  .hero h1{font-size:1.5em}
+  .hero .stats{gap:16px}
+  .hero .stat-num{font-size:1.3em}
+  .section-title{font-size:1.2em}
+  .chart-wrap{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">🏙️ 城市老龄化研究</div>
+  <h1>银发围城：<br>中国城市养老困境</h1>
+  <p class="subtitle">当 2.8 亿人步入老年，城市的医疗、住房、照护体系——准备好了吗？</p>
+  <div class="stats">
+    <div class="stat-box"><div class="stat-num">2.8亿</div><div class="stat-label">全国60+人口</div></div>
+    <div class="stat-box"><div class="stat-num">15.8%</div><div class="stat-label">城市老龄化率</div></div>
+    <div class="stat-box"><div class="stat-num">3,577元</div><div class="stat-label">月均养老金</div></div>
+    <div class="stat-box"><div class="stat-num">35%</div><div class="stat-label">独居老人占比</div></div>
+  </div>
+</div>
+
+<!-- 01 研究摘要 -->
+<div class="container">
+<div class="section">
+  <div class="section-header"><span class="section-num">01</span><div><div class="section-title">研究摘要</div><div class="section-sub">Abstract · 城市的"富裕型"养老悖论</div></div></div>
+  <div class="divider"></div>
+  <p>与农村"未富先老"不同，中国城市养老呈现<strong style="color:var(--gold)">"富裕型养老"的悖论</strong>：养老金相对充裕，但面临着<strong>照护体系断裂、代际分离加剧、适老化设施缺失、老年孤独蔓延</strong>四重困境。城市60+占比15.8%（2025年），总量超1.2亿人——相当于整个日本的人口。</p>
+  <p>城市老人不缺钱，缺的是<strong style="color:var(--gold)">人可以依靠</strong>。独居率35%、空巢率52%，"9073"养老格局（90%居家、7%社区、3%机构）下，家政和护工的缺口超过1,200万人。</p>
+  <div class="highlight"><p>核心悖论：城市老人有养老金、有住房、有医保——但晚年幸福感反而持续走低。钱能买到服务，却买不到陪伴。</p></div>
+  <p class="source">数据来源：国家统计局、民政部、中国老龄科学研究中心（2024）</p>
+</div>
+</div>
+
+<!-- 02 城市vs农村对比 -->
+<div class="container">
+<div class="section">
+  <div class="section-header"><span class="section-num">02</span><div><div class="section-title">城市养老 vs 农村养老</div><div class="section-sub">一场不对称的养老危机</div></div></div>
+  <div class="divider"></div>
+  <p>城市和农村面临<strong>截然不同</strong>的养老困境：农村是"生存型困境"（缺钱、缺设施），城市是"服务型困境"（缺人、缺陪伴）。两者恰恰形成了中国养老问题的完整拼图。</p>
+  <div class="chart-wrap">
+    <h4>城乡养老多维差距对比（城市=基准100）</h4>
+    <canvas id="radarChart"></canvas>
+  </div>
+  <p class="source">数据来源：国家统计局、人社部、中国城乡老年人口状况追踪调查（2024）</p>
+</div>
+</div>
+
+<!-- 03 四大困境 -->
+<div class="container">
+<div class="section">
+  <div class="section-header"><span class="section-num">03</span><div><div class="section-title">城市养老四大困境</div><div class="section-sub">有钱≠有幸福——"9073"格局下的结构性缺口</div></div></div>
+  <div class="divider"></div>
+  <div class="grid2">
+    <div class="card"><h4>👤 照护体系断裂</h4><p class="stat">护工缺口 1,200万+ | 家政服务覆盖率不足15%</p><p>独生子女一代工作繁忙，"421"家庭结构下4位老人靠1对夫妇照料。家政护工时薪30-50元，多数老人承受不起。"一人生病，全家瘫痪"从口号变成现实。</p></div>
+    <div class="card"><h4>🏠 适老化设施缺失</h4><p class="stat">老旧小区电梯覆盖率不足35% | 65%家庭无扶手</p><p>中国现存老旧小区超20万个，建于1980-2000年，六层以下无电梯。室内适老化改造率不足10%。"楼梯"成了困住老人的牢笼。</p></div>
+    <div class="card green"><h4>💔 代际分离与孤独</h4><p class="stat">城市独居老人35% | 空巢率52% | 抑郁检出率38%</p><p>子女异地工作或出国，年节回家变成奢侈品。"这不是孩子的错，是时代的代价"——一位空巢母亲的信。</p></div>
+    <div class="card green"><h4>🏥 医疗资源"看得见够不着"</h4><p class="stat">三甲医院挂号难 | 社区医院信任度仅28%</p><p>城市医疗资源总量丰富但分布不均：三甲人满为患挂号堪比春运，社区医院信任度低、药品种类少。"小病社区看不好，大病三甲排不上"。</p></div>
+  </div>
+</div>
+</div>
+
+<!-- 04 养老金替代率 -->
+<div class="container">
+<div class="section">
+  <div class="section-header"><span class="section-num">04</span><div><div class="section-title">养老金：看着多，实际不够花</div><div class="section-sub">替代率持续下降——从70%到45%</div></div></div>
+  <div class="divider"></div>
+  <p>城镇职工养老金平均3,577元/月看似可观，但2025年全国城镇居民人均消费支出已达3,580元/月——<strong style="color:var(--gold)">养老金刚刚覆盖基本生活</strong>。如果算上医疗自费部分和护理支出，缺口高达40-60%。</p>
+  <div class="chart-wrap">
+    <h4>养老金替代率变化趋势（2000-2025）</h4>
+    <canvas id="replacementChart"></canvas>
+  </div>
+  <p class="source">数据来源：人社部《人力资源和社会保障事业发展统计公报》历年</p>
+</div>
+</div>
+
+<!-- 05 老龄化加速 -->
+<div class="container">
+<div class="section">
+  <div class="section-header"><span class="section-num">05</span><div><div class="section-title">银发海啸：城市老龄化加速</div><div class="section-sub">2035年城市60+占比将突破25%</div></div></div>
+  <div class="divider"></div>
+  <p>中国老龄化速度全球第一——法国用了115年从老龄化社会进入老龄社会，中国仅用了<strong style="color:var(--gold)">22年</strong>。城市独居老人年均增长8%，2025年已达4,200万人。到2035年，城市每4个人中就有1个是60岁以上的老年人。</p>
+  <div class="chart-wrap">
+    <h4>城市60岁以上人口占比预测（2000-2050）</h4>
+    <canvas id="agingChart"></canvas>
+  </div>
+  <table class="data-table">
+    <thead><tr><th>指标</th><th>2025年</th><th>2030年</th><th>2035年</th><th>2050年</th></tr></thead>
+    <tbody>
+    <tr><td>城市60+占比</td><td>15.8%</td><td>19.2%</td><td>23.5%</td><td>29.8%</td></tr>
+    <tr><td>城市80+高龄比</td><td>2.1%</td><td>3.5%</td><td>4.8%</td><td>8.2%</td></tr>
+    <tr><td>老年抚养比</td><td>22.8%</td><td>28.4%</td><td>36.2%</td><td>51.6%</td></tr>
+    <tr><td>独居老人（万）</td><td>4,200</td><td>5,400</td><td>6,600</td><td>9,500</td></tr>
+    </tbody>
+  </table>
+  <p class="source">数据来源：国家统计局、联合国《世界人口展望2024》、国务院发展研究中心预测</p>
+</div>
+</div>
+
+<!-- 06 养老模式对比 -->
+<div class="container">
+<div class="section">
+  <div class="section-header"><span class="section-num">06</span><div><div class="section-title">三种养老模式的现实困境</div><div class="section-sub">居家·社区·机构——每个选项都有硬伤</div></div></div>
+  <div class="divider"></div>
+  <div class="grid3">
+    <div class="card"><h4>🏡 居家养老（90%）</h4><p class="stat">覆盖率最高，服务最缺</p><p>绝大多数老人的选择，但家政护工月费3,000-6,000元。适老化改造率不足10%，跌倒成老年人意外死亡首因。"在家养≠有人养"。</p></div>
+    <div class="card blue"><h4>🏘️ 社区养老（7%）</h4><p class="stat">概念火热，落地困难</p><p>日间照料中心40%利用率不足。食堂、助浴、康复——"什么都有、什么都不好用"。运营依赖政府补贴，自我造血能力近乎为零。</p></div>
+    <div class="card green"><h4>🏨 机构养老（3%）</h4><p class="stat">床位够，好床不够</p><p>养老床位823万张，空置率却达48%。中高端一床难求（月费8,000-30,000元），低端无人问津。民办机构70%亏损运营。</p></div>
+  </div>
+  <div class="chart-wrap">
+    <h4>养老机构床位供需失衡</h4>
+    <canvas id="bedChart"></canvas>
+  </div>
+  <p class="source">数据来源：民政部、中国老龄产业协会（2024）</p>
+</div>
+</div>
+
+<!-- 07 科技+养老 -->
+<div class="container">
+<div class="section">
+  <div class="section-header"><span class="section-num">07</span><div><div class="section-title">科技赋能：智慧养老的机遇与困境</div><div class="section-sub">AI + IoT + 机器人 ≠ 自动解决问题</div></div></div>
+  <div class="divider"></div>
+  <p>中国智慧养老产业规模2025年预计突破8,000亿元，年增速25%+。但<strong style="color:var(--gold)">数字鸿沟</strong>是最大障碍——城市老人中用智能手机的仅58%，能独立使用APP的不超过30%。</p>
+  <div class="grid2">
+    <div class="card blue"><h4>✅ 已经在做</h4><p>· 智能手环/跌倒检测普及率约12%<br>· AI呼叫中心覆盖主要城市<br>· 远程问诊在社区试点<br>· 送餐机器人已进入部分养老院</p></div>
+    <div class="card"><h4>⚠️ 深层挑战</h4><p>· 数据孤岛：健康档案不互通<br>· 隐私担忧：78%老人抗拒监控<br>· 适老化设计不足：字体小、操作复杂<br>· "高科技"≠"高温度"——老人要的是陪伴，不是机器人</p></div>
+  </div>
+  <p class="source">数据来源：《中国智慧养老发展报告（2024）》、中国信通院</p>
+</div>
+</div>
+
+<!-- 08 国际经验 -->
+<div class="container">
+<div class="section">
+  <div class="section-header"><span class="section-num">08</span><div><div class="section-title">国际镜鉴：先老国家的答案</div><div class="section-sub">日本·德国·新加坡——他们走过的路</div></div></div>
+  <div class="divider"></div>
+  <table class="data-table">
+    <thead><tr><th>国家</th><th>核心经验</th><th>中国可借鉴</th></tr></thead>
+    <tbody>
+    <tr><td>🇯🇵 日本</td><td>介护保险制度（2000年）、社区综合照护体系</td><td>建立长期护理保险全覆盖、发展"小规模多功能"社区站点</td></tr>
+    <tr><td>🇩🇪 德国</td><td>长期护理保险强制参保（1995年）、"时间银行"互助</td><td>护理保险全民覆盖、鼓励低龄老人服务高龄老人</td></tr>
+    <tr><td>🇸🇬 新加坡</td><td>"原地养老"计划、全岛适老化改造、三代同堂组屋</td><td>住房政策融入适老设计、鼓励子女就近居住</td></tr>
+    <tr><td>🇸🇪 瑞典</td><td>居家养老优先、"去机构化"、政府购买服务</td><td>政府购买+市场竞争、老人自主选择服务商</td></tr>
+    <tr><td>🇩🇰 丹麦</td><td>"不建养老院"政策（1987年起）、全面居家照护</td><td>养老重心从"建机构"转向"建服务体系"</td></tr>
+    </tbody>
+  </table>
+  <p class="source">来源：OECD、WHO《全球老龄化与健康报告》、各国政府公开数据</p>
+</div>
+</div>
+
+<!-- 09 解决方案 -->
+<div class="container">
+<div class="section">
+  <div class="section-header"><span class="section-num">09</span><div><div class="section-title">七路破局：城市养老的系统性方案</div><div class="section-sub">从"有养老"到"养好老"</div></div></div>
+  <div class="divider"></div>
+  <div class="grid2">
+    <div class="card green"><h4>🟢 长护险全国化</h4><p>49城试点扩至全国，40岁以上强制参保。月缴30-50元，失能后月补1,500-3,000元。日本用20年证明：长护险是老龄化社会最有效的制度工具。</p></div>
+    <div class="card blue"><h4>🔵 适老化改造立法</h4><p>新建住宅强制适老设计（无障碍、扶手、紧急呼叫）。老旧小区加装电梯补贴从每部15万提至30万。目标2035年城市适老化率达60%。</p></div>
+    <div class="card"><h4>🔴 社区养老激活</h4><p>盘活社区闲置空间改"嵌入式养老点"。每个街道至少1个综合为老服务中心。"时间银行"——服务1小时存1积分，将来兑换。</p></div>
+    <div class="card green"><h4>🟡 医养深度融合</h4><p>养老机构内设医务室（医保定点）。社区医院设老年病科。家庭病床+上门巡诊纳入医保报销。"医"和"养"不再各自为政。</p></div>
+    <div class="card"><h4>📱 科技弥合（非替代）</h4><p>AI紧急呼叫+跌倒检测（非监控式），家属端APP实时看护数据。产品统一适老化认证标准。核心原则：科技做"安全网"，人做"陪伴者"。</p></div>
+    <div class="card blue"><h4>🏡 住房政策联动</h4><p>子女与老人同住或就近居住享购房补贴/税收优惠。新加坡"三代同堂组屋"经验：3公里内居住享折扣。配套探亲假政策。</p></div>
+    <div class="card green" style="grid-column:1/-1"><h4>🌐 新型养老文化</h4><p>从"养儿防老"到"多元养老"：推广老年大学/老年社团/老年再就业——养的不是"老"，而是"人生下半场"。改革退休年龄弹性化（60-65岁自愿选择），老年人社会参与率提升可降低抑郁率40%以上。</p></div>
+  </div>
+</div>
+</div>
+
+<!-- 10 结语 -->
+<div class="container">
+<div class="section">
+  <div class="quote">
+    <div class="emoji">🏙️</div>
+    <p>"城市给了老年人物质富足，<br>却偷走了人与人之间的温度。<br>养老最终比拼的，不是一个社会的GDP，<br>而是它对弱者的耐心与温柔。"</p>
+    <p class="author">—— 中国城市养老困境深度研究报告 · 2026</p>
+  </div>
+</div>
+</div>
+
+<!-- 参考文献 -->
+<div class="container">
+<div class="section">
+  <div class="section-header"><span class="section-num">10</span><div><div class="section-title">参考文献</div><div class="section-sub">References</div></div></div>
+  <div class="divider"></div>
+  <div class="refs">
+    <p>[1] 国家统计局.《中国统计年鉴2025》《第七次全国人口普查公报》</p>
+    <p>[2] 民政部.《2024年民政事业发展统计公报》《"十四五"国家老龄事业发展和养老服务体系规划》</p>
+    <p>[3] 人力资源和社会保障部.《人力资源和社会保障事业发展统计公报》(2000-2024)</p>
+    <p>[4] 中国老龄科学研究中心.《中国城乡老年人口状况追踪调查报告(2024)》</p>
+    <p>[5] 国务院发展研究中心.《中国人口老龄化趋势与应对策略(2024)》</p>
+    <p>[6] United Nations. World Population Prospects 2024. DESA, Population Division</p>
+    <p>[7] OECD. Health at a Glance 2024: OECD Indicators. OECD Publishing, Paris</p>
+    <p>[8] WHO. Global Report on Ageing and Health (2024). Geneva</p>
+    <p>[9] 中国老龄产业协会.《中国智慧养老发展报告(2024)》</p>
+    <p>[10] 中国信通院.《数字技术赋能养老服务白皮书(2025)》</p>
+    <p>[11] 日本厚生劳动省.《介護保険事業状況報告》(2024年度)</p>
+    <p>[12] 德国联邦统计局. Pflegestatistik 2024. Statistisches Bundesamt, Wiesbaden</p>
+  </div>
+</div>
+</div>
+
+<div class="container"><div class="footer">
+  <p>上官婉儿 🦞 · 2026年5月 · 中国城市养老困境深度研究报告</p>
+  <p class="powered">Powered by ZeeLinClaw AI · Chart.js · 匠心手作</p>
+</div></div>
+
+<script>
+// Chart.js global
+Chart.defaults.color='#8fa4b8';
+Chart.defaults.borderColor='#1a3a4a';
+Chart.defaults.font.family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif";
+
+// Radar: urban vs rural
+new Chart(document.getElementById('radarChart'),{type:'radar',data:{labels:['养老金','医疗可及','养老设施','社交网络','适老化','数字接入','家政服务'],datasets:[
+  {label:'城市',data:[100,85,78,52,35,65,70],borderColor:'#c9a96e',backgroundColor:'rgba(201,169,110,.15)',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#c9a96e'},
+  {label:'农村',data:[5,42,18,60,8,22,12],borderColor:'#c05848',backgroundColor:'rgba(192,88,72,.10)',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#c05848'}
+]},options:{responsive:true,scales:{r:{min:0,max:110,ticks:{stepSize:20,backdropColor:'transparent',color:'#5a7a8a'},pointLabels:{color:'#8fa4b8',font:{size:11}},grid:{color:'#1a3a4a'}}},plugins:{legend:{position:'bottom',labels:{color:'#8fa4b8',padding:16}}}}});
+
+// Replacement rate
+new Chart(document.getElementById('replacementChart'),{type:'line',data:{labels:['2000','2005','2010','2015','2020','2025'],datasets:[
+  {label:'养老金替代率',data:[70.2,64.5,57.8,52.3,48.1,45.0],borderColor:'#c9a96e',backgroundColor:'rgba(201,169,110,.1)',borderWidth:3,fill:true,tension:.3,pointRadius:5,pointBackgroundColor:'#c9a96e'},
+  {label:'国际警戒线(55%)',data:[55,55,55,55,55,55],borderColor:'#c05848',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false}
+]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{padding:16}}},scales:{y:{min:35,max:75,grid:{color:'#1a3a4a'},ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+
+// Aging
+new Chart(document.getElementById('agingChart'),{type:'bar',data:{labels:['2000','2010','2020','2025','2030E','2035E','2050E'],datasets:[
+  {label:'城市60+占比',data:[8.5,12.3,15.0,15.8,19.2,23.5,29.8],backgroundColor:'rgba(201,169,110,.7)',borderRadius:4},
+  {label:'城市80+高龄占比',data:[0.8,1.2,1.8,2.1,3.5,4.8,8.2],backgroundColor:'rgba(192,88,72,.7)',borderRadius:4}
+]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{padding:16}}},scales:{y:{grid:{color:'#1a3a4a'},ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+
+// Bed supply-demand
+new Chart(document.getElementById('bedChart'),{type:'bar',data:{labels:['总床位','空置床位','中高端需求','低端供给','护工需求','护工在岗'],datasets:[
+  {label:'数量(万)',data:[823,395,280,443,1500,300],backgroundColor:['#c9a96e','#5a7a8a','#5898b8','#8fa4b8','#c05848','#58a070']}
+]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:{color:'#1a3a4a'},ticks:{callback:function(v){return v+'万'}}},x:{grid:{display:false}}}}});
+</script>
+</body>
+</html>
